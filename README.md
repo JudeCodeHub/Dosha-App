@@ -4,7 +4,7 @@ MarinZen is a professional full-stack wellness application built on a microservi
 
 ## 🏗️ Architecture Overview
 
-The project follows a modern microservices pattern for scalability and separation of concerns.
+The project follows a clean microservices pattern where the **Frontend** communicates exclusively with the **API Gateway**.
 
 ```text
                                   +-------------------+
@@ -12,7 +12,7 @@ The project follows a modern microservices pattern for scalability and separatio
                                   |  (React + Vite)   |
                                   +---------+---------+
                                             |
-                                            v
+                                            v (Port 8000)
                                   +---------+---------+
                                   |   API Gateway     |
                                   |    (FastAPI)      |
@@ -20,7 +20,7 @@ The project follows a modern microservices pattern for scalability and separatio
                                        |    |    |
             +--------------------------+    |    +--------------------------+
             |                               |                               |
-            v                               v                               v
+            v (Port 8001)                   v (Port 8002)                   v (Port 8003)
   +---------+---------+           +---------+---------+           +---------+---------+
   |   Quiz Service    |           |  Result Service   |           |   Auth Service    |
   |    (FastAPI)      |           |    (FastAPI)      |           |    (FastAPI)      |
@@ -30,59 +30,48 @@ The project follows a modern microservices pattern for scalability and separatio
 ## 🚀 Tech Stack
 
 - **Frontend**: React, Vite, Tailwind CSS, Lucide React
-- **Backend**: FastAPI (Python), HTTPX (for service-to-service communication)
-- **Database**: SQLAlchemy (supporting PostgreSQL/SQLite)
+- **Backend**: FastAPI (Python), SQLModel/SQLAlchemy
+- **Database**: PostgreSQL (Neon) or SQLite (Local)
 - **Authentication**: JWT (JSON Web Tokens)
-
-## ✨ Features
-
-- **Dosha Quiz**: A comprehensive assessment to determine your Vata, Pitta, and Kapha balance.
-- **Personalized Dashboard**: View unique recommendations tailored to your dominant Dosha.
-- **Wellness Insights**: Specialized tips for diet, yoga, skincare, and more.
-- **User Authentication**: Secure signup and login to track your wellness journey.
-
-## 📁 Project Structure
-
-```text
-marinzen/
-├ frontend/              # React + Vite application
-├ services/              # Microservices directory
-│  ├ api-gateway/        # Main entry point and request router (Port 8000)
-│  ├ quiz-service/       # Quiz question management (Port 8001)
-│  ├ result-service/     # Result calculation and recommendations (Port 8002)
-│  └ auth-service/       # User authentication and profiles (Port 8003)
-├ .gitignore             # Unified project-wide ignore rules
-└ README.md              # Project documentation
-```
 
 ## 🛠️ Setup Instructions
 
 ### 1. Prerequisites
-- Python 3.9+
-- Node.js 18+
-- npm or yarn
+
+- **Python 3.9+**
+- **Node.js 18+**
+- **PostgreSQL** (Optional, falls back to SQLite by default)
 
 ### 2. Environment Configuration
-Each service requires its own `.env` file. A `.env.example` template is provided in each service directory and the frontend.
 
-1. Copy the example files:
-   ```bash
-   cp frontend/.env.example frontend/.env
-   cp services/api-gateway/.env.example services/api-gateway/.env
-   # Repeat for other services
-   ```
-2. Update the `.env` files with your local configuration (e.g., `DATABASE_URL`, `SECRET_KEY`).
+Each service requires a `.env` file to function.
+
+1. Use the `.env.example` in the root or each subdirectory as a template.
+2. **Key Variable**: Ensure `SECRET_KEY` is consistent across `auth-service` and `result-service`.
+3. **Frontend**: Only `VITE_API_GATEWAY_URL` (Port 8000) is required for the frontend.
 
 ### 3. Backend Setup
-For each service in `services/`:
+
+For each service in `services/` (`api-gateway`, `auth-service`, `quiz-service`, `result-service`):
+
 ```bash
 cd services/<service-name>
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Frontend Setup
+### 4. Data Seeding (Required)
+
+The dashboard recommendations require initial data. Run the seed script once your `result-service` environment is set up:
+
+```bash
+cd services/result-service
+python seed_recommendations.py
+```
+
+### 5. Frontend Setup
+
 ```bash
 cd frontend
 npm install
@@ -90,42 +79,31 @@ npm install
 
 ## ⏻ How to Run
 
-### Start Backend Services
-Run each service in a separate terminal:
-```bash
-# API Gateway
-cd services/api-gateway
-uvicorn app.main:app --reload --port 8000
+To run the full stack, you must start the backend services first, followed by the frontend.
 
-# Quiz Service
-cd services/quiz-service
-uvicorn app.main:app --reload --port 8001
+### 1. Start Microservices
 
-# Result Service
-cd services/result-service
-uvicorn app.main:app --reload --port 8002
+Open 4 separate terminals and run:
 
-# Auth Service
-cd services/auth-service
-uvicorn app.main:app --reload --port 8003
-```
+| Service | Command (from service directory) | Port |
+| :--- | :--- | :--- |
+| **API Gateway** | `uvicorn app.main:app --reload --port 8000` | 8000 |
+| **Quiz Service** | `uvicorn app.main:app --reload --port 8001` | 8001 |
+| **Result Service** | `uvicorn app.main:app --reload --port 8002` | 8002 |
+| **Auth Service** | `uvicorn app.main:app --reload --port 8003` | 8003 |
 
-### Start Frontend
+### 2. Start Frontend
+
 ```bash
 cd frontend
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`.
+The app will be live at `http://localhost:5173`.
 
-## 📡 API Endpoints Overview
+## 📡 API Proxy Strategy
+The **API Gateway** acts as a reverse proxy. The frontend should never call internal services (8001-8003) directly.
 
-| Service | Endpoint | Method | Description |
-|---------|----------|--------|-------------|
-| **Gateway** | `/api/questions` | GET | Proxy to Quiz Service |
-| **Gateway** | `/api/result` | POST | Proxy to Result Service |
-| **Auth** | `/auth/signup` | POST | Register a new user |
-| **Auth** | `/auth/login` | POST | Authenticate and get JWT |
-| **Quiz** | `/questions` | GET | Fetch quiz questions |
-| **Result** | `/calculate-result` | POST | Calculate dominant Dosha |
-| **Result** | `/recommendations/{dosha}` | GET | Get specific recommendations |
+- `/auth/*` -> Proxied to Auth Service
+- `/quiz/*` -> Proxied to Quiz Service
+- `/recommendations/*` -> Proxied to Result Service
