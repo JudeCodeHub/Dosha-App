@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import RecommendationSection from "@/components/dashboard/RecommendationSection";
+import DoshaTrackingBadge from "@/components/dashboard/DoshaTrackingBadge";
 import { getPersonalization } from "@/utils/personalizationStorage";
 import { LogOut, Loader2, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { API_BASE_URL } from "@/config/api";
+
 
 const doshaVisuals = {
   vata: {
@@ -142,6 +144,13 @@ export const DashboardPage = () => {
 
   const visual = dosha ? doshaVisuals[dosha] : null;
 
+  const trackingData = {
+    dosha: dosha,
+    mode: personalization?.mode || "manual",
+    scores: personalization?.scores || null,
+    lastUpdated: personalization?.lastUpdated || "Live Profile - Synced"
+  };
+
   if (!dosha || !visual) return null;
 
   if (loadingContent) {
@@ -179,11 +188,12 @@ export const DashboardPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 bg-stone-100/50 dark:bg-stone-900/50 px-6 py-2.5 rounded-full border border-stone-200/50 dark:border-stone-800/50 shadow-inner group transition-all">
-            <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{visual.icon}</span>
-            <span className={`text-xl font-extrabold uppercase tracking-[0.2em] ${visual.color}`}>
-              {dosha}
-            </span>
+          <div className="flex items-center justify-center">
+            <DoshaTrackingBadge 
+              dosha={dosha} 
+              visual={visual} 
+              trackingData={trackingData} 
+            />
           </div>
 
           <div className="flex items-center justify-end gap-3 basis-1/4">
