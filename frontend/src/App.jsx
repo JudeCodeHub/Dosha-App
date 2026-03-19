@@ -14,7 +14,7 @@ import { API_BASE_URL } from "@/config/api";
 
 const QuizModule = () => {
   const navigate = useNavigate();
-  // ── Lazy initialisers: restore from localStorage on first load ──────────
+ 
   const [quizStarted, setQuizStarted] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
