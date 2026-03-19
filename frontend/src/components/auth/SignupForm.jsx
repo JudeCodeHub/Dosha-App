@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthInput } from "./AuthInput";
 import { Loader2 } from "lucide-react";
+import { API_BASE_URL } from "@/config/api";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
@@ -43,8 +44,7 @@ export const SignupForm = () => {
     if (validate()) {
       setIsLoading(true);
       try {
-        const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL || "http://127.0.0.1:8003";
-        const response = await fetch(`${authUrl}/auth/signup`, {
+        const response = await fetch(`${API_BASE_URL}/auth/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -60,36 +60,38 @@ export const SignupForm = () => {
           return;
         }
 
-        // Successfully created user context on Database
-        const data = await response.json();
-
-        // Clear any stale quiz state from previous attempts or other users
-        localStorage.removeItem("prakritiQuizState");
-
         // Auto-login to preserve the token in Dashboard routes
         try {
-          const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL || "http://127.0.0.1:8003";
-          const loginRes = await fetch(`${authUrl}/auth/login`, {
+          const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: formData.email, password: formData.password })
           });
+          
           if (loginRes.ok) {
             const loginData = await loginRes.json();
+            
+            // Set all required auth data before navigating
             localStorage.setItem("token", loginData.access_token);
+            localStorage.setItem("userId", String(loginData.user_id));
+            localStorage.setItem("userName", loginData.name);
+            localStorage.setItem("userEmail", loginData.email);
+            localStorage.setItem("marinzen_auth", "true");
+            
+            // Clear quiz state and navigate
+            localStorage.removeItem("prakritiQuizState");
+            navigate("/discover");
+          } else {
+            // If auto-login fails, redirect to login tab so they can try again
+            console.error("Auto-login failed after signup");
+            setErrors({ submit: "Signup successful! Please sign in to continue." });
+            setIsLoading(false);
           }
         } catch (err) {
-          console.error("Auto-login failed:", err);
+          console.error("Auto-login request failed:", err);
+          setErrors({ submit: "Signup successful! Please sign in to continue." });
+          setIsLoading(false);
         }
-        
-        // Push user directly into Dashboard discovery flow
-        localStorage.setItem("marinzen_auth", "true");
-        // Also log them in so patches work via headers implicitly
-        localStorage.setItem("userId", String(data.user_id));
-        localStorage.setItem("userName", data.name);
-        localStorage.setItem("userEmail", data.email);
-        
-        navigate("/discover");
       } catch (error) {
         console.error("Signup request failed:", error);
         setErrors({ submit: "A network error occurred. Please try again." });

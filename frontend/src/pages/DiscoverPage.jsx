@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import DiscoveryOptionCard from "@/components/discover/DiscoveryOptionCard";
 import DoshaCard from "@/components/discover/DoshaCard";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { savePersonalization } from "@/utils/personalizationStorage";
-import BackButton from "@/components/navigation/BackButton";
+import { API_BASE_URL } from "@/config/api";
 
 export const DiscoverPage = () => {
   const navigate = useNavigate();
@@ -18,9 +18,8 @@ export const DiscoverPage = () => {
     try {
       if (userId) {
         const token = localStorage.getItem("token");
-        const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL || "http://127.0.0.1:8003";
-        // Broadcast manual override tracking to Backend
-        await fetch(`${authUrl}/auth/dosha`, {
+        // Broadcast manual override tracking to Backend via Gateway
+        await fetch(`${API_BASE_URL}/auth/dosha`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -56,8 +55,18 @@ export const DiscoverPage = () => {
       <div className="pointer-events-none absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-teal-900/10 blur-3xl opacity-50" />
       <div className="pointer-events-none absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-orange-900/10 blur-3xl opacity-40" />
 
-      {/* Back Button Example */}
-      <BackButton to="/auth" />
+      {/* Inline Back Component */}
+      <div className="absolute top-6 left-6 z-50">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/auth")}
+          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back
+        </Button>
+      </div>
 
       {/* Main Container */}
       <div className="w-full max-w-5xl z-10 flex flex-col items-center">

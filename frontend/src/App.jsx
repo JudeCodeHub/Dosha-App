@@ -3,15 +3,17 @@ import { Button } from "@/components/ui/button";
 import QuizIntro from "@/components/quiz/QuizIntro";
 import QuizQuestion from "@/components/quiz/QuizQuestion";
 import QuizResult from "@/components/quiz/QuizResult";
-import BackButton from "@/components/navigation/BackButton";
+import { ChevronLeft } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import IntroPage from "@/pages/IntroPage";
 import AuthPage from "@/pages/AuthPage";
 import DiscoverPage from "@/pages/DiscoverPage";
 import DashboardPage from "@/pages/DashboardPage";
+import { API_BASE_URL } from "@/config/api";
 
 const QuizModule = () => {
+  const navigate = useNavigate();
   // ── Lazy initialisers: restore from localStorage on first load ──────────
   const [quizStarted, setQuizStarted] = useState(() => {
     try {
@@ -48,8 +50,7 @@ const QuizModule = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       try {
-        const baseUrl = import.meta.env.VITE_API_GATEWAY_URL || "http://127.0.0.1:8000";
-        const response = await fetch(`${baseUrl}/api/questions`, { signal: controller.signal });
+        const response = await fetch(`${API_BASE_URL}/api/questions`, { signal: controller.signal });
         
         clearTimeout(timeoutId);
 
@@ -113,6 +114,8 @@ const QuizModule = () => {
   const handlePrev = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
+    } else {
+      navigate("/discover");
     }
   };
 
@@ -156,8 +159,20 @@ const QuizModule = () => {
       <div className="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-orange-200/30 dark:bg-orange-900/20 blur-3xl" />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-100/20 dark:bg-amber-900/10 blur-3xl" />
 
-      {/* Back to Discover — shown during quiz questions and result phase */}
-      {quizStarted && <BackButton to="/discover" />}
+      {/* Inline Back Component — replaces global BackButton */}
+      {quizStarted && (
+        <div className="absolute top-6 left-6 z-50">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handlePrev}
+            className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back
+          </Button>
+        </div>
+      )}
 
       <div className="relative z-10 w-full flex items-center justify-center">
         {!quizStarted ? (

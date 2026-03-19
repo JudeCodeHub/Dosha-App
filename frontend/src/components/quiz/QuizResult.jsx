@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { savePersonalization } from "@/utils/personalizationStorage";
+import { API_BASE_URL } from "@/config/api";
 
 const doshaDescriptions = {
   vata: "Vata is associated with movement, lightness, creativity, and variability.",
@@ -230,8 +231,7 @@ const QuizResult = ({ result, scores, onRestart }) => {
             const token = localStorage.getItem("token");
             if (userId && token) {
               try {
-                const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL || "http://127.0.0.1:8003";
-                await fetch(`${authUrl}/auth/dosha`, {
+                await fetch(`${API_BASE_URL}/auth/dosha`, {
                   method: "PATCH",
                   headers: {
                     "Content-Type": "application/json",

@@ -1,13 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import BackButton from "@/components/navigation/BackButton";
+import { useNavigate } from "react-router-dom";
 
 const QuizIntro = ({ onStart }) => {
+  const navigate = useNavigate();
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center">
-      {/* Back Link to Discover */}
-      <BackButton to="/discover" />
+      {/* Inline Back Component */}
+      <div className="absolute top-0 left-0 z-50">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/discover")}
+          className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back
+        </Button>
+      </div>
 
       {/* Glass card */}
       <div className="relative w-full bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-3xl shadow-lg shadow-zinc-200/60 dark:shadow-stone-900/60 px-8 py-12 sm:px-14 sm:py-16 text-center overflow-hidden transition-colors duration-300">

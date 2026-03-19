@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AuthInput } from "./AuthInput";
 import { Loader2 } from "lucide-react";
+import { API_BASE_URL } from "@/config/api";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -28,8 +29,7 @@ export const LoginForm = () => {
     if (validate()) {
       setIsLoading(true);
       try {
-        const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL || "http://127.0.0.1:8003";
-        const response = await fetch(`${authUrl}/auth/login`, {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: formData.email, password: formData.password })
