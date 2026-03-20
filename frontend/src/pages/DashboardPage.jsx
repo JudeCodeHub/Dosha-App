@@ -256,7 +256,7 @@ export const DashboardPage = () => {
                   content={content?.[section.key] || content?.[section.altKey]}
                   icon={section.icon}
                   visual={visual}
-                  className="h-full w-full" /* Pass h-full to the component */
+                  className="h-full w-full" 
                 />
               </div>
             ))}
