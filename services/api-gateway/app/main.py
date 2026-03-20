@@ -24,9 +24,17 @@ app.add_middleware(
 )
 
 # Service URLs
-AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://127.0.0.1:8003")
-QUIZ_SERVICE_URL = os.getenv("QUIZ_SERVICE_URL", "http://127.0.0.1:8001")
-RESULT_SERVICE_URL = os.getenv("RESULT_SERVICE_URL", "http://127.0.0.1:8002")
+AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL")
+QUIZ_SERVICE_URL = os.getenv("QUIZ_SERVICE_URL")
+RESULT_SERVICE_URL = os.getenv("RESULT_SERVICE_URL")
+
+# Basic validation (optional but recommended)
+if not all([AUTH_SERVICE_URL, QUIZ_SERVICE_URL, RESULT_SERVICE_URL]):
+    # Provide local defaults if not set in environment (for easier development)
+    AUTH_SERVICE_URL = AUTH_SERVICE_URL or "http://127.0.0.1:8003"
+    QUIZ_SERVICE_URL = QUIZ_SERVICE_URL or "http://127.0.0.1:8001"
+    RESULT_SERVICE_URL = RESULT_SERVICE_URL or "http://127.0.0.1:8002"
+
 
 @app.get("/")
 def read_root():
