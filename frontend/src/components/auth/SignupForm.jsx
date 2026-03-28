@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { AuthInput } from "./AuthInput";
 import { Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,21 +20,21 @@ export const SignupForm = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = "Full Name is required";
+    if (!formData.name) newErrors.name = t('auth.signup.errors.name_req');
     if (!formData.email) {
-      newErrors.email = "Email is required";
+      newErrors.email = t('auth.signup.errors.email_req');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email format is invalid";
+      newErrors.email = t('auth.signup.errors.email_inv');
     }
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = t('auth.signup.errors.password_req');
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = t('auth.signup.errors.password_len');
     }
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Confirm Password is required";
+      newErrors.confirmPassword = t('auth.signup.errors.confirm_req');
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = t('auth.signup.errors.confirm_match');
     }
 
     setErrors(newErrors);
@@ -56,7 +58,7 @@ export const SignupForm = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setErrors({ submit: errorData.detail || "Signup failed" });
+          setErrors({ submit: errorData.detail || t('auth.signup.errors.failed') });
           return;
         }
 
@@ -84,17 +86,17 @@ export const SignupForm = () => {
           } else {
             // If auto-login fails, redirect to login tab so they can try again
             console.error("Auto-login failed after signup");
-            setErrors({ submit: "Signup successful! Please sign in to continue." });
+            setErrors({ submit: t('auth.signup.errors.success_login') });
             setIsLoading(false);
           }
         } catch (err) {
           console.error("Auto-login request failed:", err);
-          setErrors({ submit: "Signup successful! Please sign in to continue." });
+          setErrors({ submit: t('auth.signup.errors.success_login') });
           setIsLoading(false);
         }
       } catch (error) {
         console.error("Signup request failed:", error);
-        setErrors({ submit: "A network error occurred. Please try again." });
+        setErrors({ submit: t('auth.signup.errors.network') });
       } finally {
         setIsLoading(false);
       }
@@ -116,37 +118,37 @@ export const SignupForm = () => {
         </div>
       )}
       <AuthInput
-        label="Full Name"
+        label={t('auth.signup.name_label')}
         id="name"
         type="text"
-        placeholder="Jane Doe"
+        placeholder={t('auth.signup.name_placeholder')}
         value={formData.name}
         onChange={handleChange}
         error={errors.name}
       />
       <AuthInput
-        label="Email Address"
+        label={t('auth.signup.email_label')}
         id="email"
         type="email"
-        placeholder="you@example.com"
+        placeholder={t('auth.signup.email_placeholder')}
         value={formData.email}
         onChange={handleChange}
         error={errors.email}
       />
       <AuthInput
-        label="Password"
+        label={t('auth.signup.password_label')}
         id="password"
         type="password"
-        placeholder="Create a password"
+        placeholder={t('auth.signup.password_placeholder')}
         value={formData.password}
         onChange={handleChange}
         error={errors.password}
       />
       <AuthInput
-        label="Confirm Password"
+        label={t('auth.signup.confirm_label')}
         id="confirmPassword"
         type="password"
-        placeholder="Confirm your password"
+        placeholder={t('auth.signup.confirm_placeholder')}
         value={formData.confirmPassword}
         onChange={handleChange}
         error={errors.confirmPassword}
@@ -160,10 +162,10 @@ export const SignupForm = () => {
         {isLoading ? (
           <>
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            Signing up...
+            {t('auth.signup.signing_up')}
           </>
         ) : (
-          "Sign Up"
+          t('auth.signup.sign_up')
         )}
       </Button>
     </form>

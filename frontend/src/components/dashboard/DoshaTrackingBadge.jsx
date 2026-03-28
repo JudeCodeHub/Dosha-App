@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Activity } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 
 const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -37,15 +38,15 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
     const pPct = getPercent(scores.pitta);
     const kPct = getPercent(scores.kapha);
 
-    if (vPct > 50) return "Grounding and warming balance";
-    if (pPct > 50) return "Cooling and calming balance";
-    if (kPct > 50) return "Light and energizing balance";
+    if (vPct > 50) return t('dashboard.focus.vata', "Grounding and warming balance");
+    if (pPct > 50) return t('dashboard.focus.pitta', "Cooling and calming balance");
+    if (kPct > 50) return t('dashboard.focus.kapha', "Light and energizing balance");
     
-    // Default to dominant if none > 50
+   
     const dLower = dosha?.toLowerCase();
-    if (dLower === "vata") return "Grounding and warming balance";
-    if (dLower === "pitta") return "Cooling and calming balance";
-    return "Light and energizing balance";
+    if (dLower === "vata") return t('dashboard.focus.vata', "Grounding and warming balance");
+    if (dLower === "pitta") return t('dashboard.focus.pitta', "Cooling and calming balance");
+    return t('dashboard.focus.kapha', "Light and energizing balance");
   };
 
   return (
@@ -64,7 +65,7 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
           {visual.icon}
         </span>
         <span className={`text-xl font-extrabold uppercase tracking-[0.2em] ${visual.color}`}>
-          {dosha}
+          {t(`doshas.${dosha}`, dosha)}
         </span>
       </div>
 
@@ -82,11 +83,11 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-teal-500" />
                 <span className="text-xs font-bold uppercase tracking-widest text-stone-500">
-                  Profile
+                  {t('dashboard.profile', 'Profile')}
                 </span>
               </div>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 uppercase">
-                {mode}
+                {mode === 'manual' ? t('dashboard.mode_manual', 'manual') : t('dashboard.mode_quiz', 'quiz')}
               </span>
             </div>
 
@@ -95,7 +96,7 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl bg-linear-to-br ${visual.gradient} text-white shadow-sm font-sans`}>
                  {visual.icon}
                </div>
-               <p className={`text-2xl font-black uppercase tracking-tight ${visual.color}`}>{dosha}</p>
+               <p className={`text-2xl font-black uppercase tracking-tight ${visual.color}`}>{t(`doshas.${dosha}`, dosha)}</p>
             </div>
 
             {/* Progress Bars (Breakdown) */}
@@ -109,7 +110,7 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
                     <div key={name} className="space-y-1.5">
                       <div className="flex justify-between items-end">
                         <span className={`text-[11px] font-bold uppercase tracking-wider ${isDom ? 'text-stone-800 dark:text-stone-200' : 'text-stone-400'}`}>
-                          {name}
+                          {t(`doshas.${name.toLowerCase()}`, name)}
                         </span>
                         <span className={`text-xs font-black ${isDom ? 'text-stone-800 dark:text-stone-200' : 'text-stone-400'}`}>
                           {pct}%
@@ -130,7 +131,7 @@ const DoshaTrackingBadge = ({ dosha, visual, trackingData }) => {
             {/* Insights Section */}
             <div className="pt-4 border-t border-stone-100 dark:border-stone-800 space-y-2">
               <div className="space-y-0.5">
-                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">Primary Focus</p>
+                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">{t('dashboard.primary_focus', 'Primary Focus')}</p>
                 <p className="text-xs font-bold text-stone-700 dark:text-stone-200">{getFocus()}</p>
               </div>
             </div>

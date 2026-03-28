@@ -1,4 +1,4 @@
-export const DoshaCard = ({ dosha, icon, colorClass, onClick }) => {
+export const DoshaCard = ({ dosha, label, icon, colorClass, onClick }) => {
   return (
     <button
       onClick={() => onClick(dosha)}
@@ -8,7 +8,7 @@ export const DoshaCard = ({ dosha, icon, colorClass, onClick }) => {
         <span className="text-xl">{icon}</span>
       </div>
       <span className="text-stone-700 font-semibold tracking-wide group-hover:text-stone-900 dark:text-stone-300 dark:group-hover:text-stone-100 transition-colors">
-        {dosha}
+        {label || dosha}
       </span>
     </button>
   );

@@ -1,0 +1,170 @@
+{
+  "doshas": {
+    "vata": "Vata",
+    "pitta": "Pitta",
+    "kapha": "Kapha"
+  },
+  "quiz": {
+    "intro": {
+      "badge": "Ayurvedic Assessment",
+      "title_discover": "Discover Your ",
+      "title_prakriti": "Prakriti",
+      "subtitle_p1": "Uncover your unique mind-body constitution rooted in the ancient wisdom of ",
+      "subtitle_p2": "Ayurveda",
+      "meta": "21 questions  ·  ~5 minutes  ·  Free & personalized",
+      "cta": "Begin Your Journey"
+    }
+  },
+  "intro": {
+    "title": "MarinZen",
+    "tagline": "Personalized Ayurvedic Wellness",
+    "description": "MarinZen helps you discover your Ayurvedic body constitution (Prakriti) and provides personalized guidance for diet, lifestyle, yoga, skincare, and daily wellness routines. Based on your unique Dosha, MarinZen creates a balanced path toward better health.",
+    "cta": "Get Started",
+    "features": {
+      "discovery": {
+        "title": "Discover Your Dosha",
+        "description": "Understand your natural body constitution."
+      },
+      "customization": {
+        "title": "Personalized Wellness",
+        "description": "Get diet, yoga, and lifestyle guidance."
+      },
+      "holistic": {
+        "title": "Holistic Balance",
+        "description": "Improve physical and mental wellbeing."
+      }
+    }
+  },
+  "auth": {
+    "back": "Back",
+    "welcome": "Welcome to MarinZen",
+    "subtitle": "Access your personalized wellness journey.",
+    "tabs": {
+      "login": "Login",
+      "signup": "Sign Up"
+    },
+    "login": {
+      "email_label": "Email Address",
+      "email_placeholder": "you@example.com",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password",
+      "forgot_password": "Forgot password?",
+      "sign_in": "Sign In",
+      "logging_in": "Logging in...",
+      "errors": {
+        "email_req": "Email is required",
+        "email_inv": "Email format is invalid",
+        "password_req": "Password is required",
+        "failed": "Login failed",
+        "network": "A network error occurred. Please try again."
+      }
+    },
+    "signup": {
+      "name_label": "Full Name",
+      "name_placeholder": "Jane Doe",
+      "email_label": "Email Address",
+      "email_placeholder": "you@example.com",
+      "password_label": "Password",
+      "password_placeholder": "Create a password",
+      "confirm_label": "Confirm Password",
+      "confirm_placeholder": "Confirm your password",
+      "sign_up": "Sign Up",
+      "signing_up": "Signing up...",
+      "errors": {
+        "name_req": "Full Name is required",
+        "email_req": "Email is required",
+        "email_inv": "Email format is invalid",
+        "password_req": "Password is required",
+        "password_len": "Password must be at least 6 characters",
+        "confirm_req": "Confirm Password is required",
+        "confirm_match": "Passwords do not match",
+        "failed": "Signup failed",
+        "success_login": "Signup successful! Please sign in to continue.",
+        "network": "A network error occurred. Please try again."
+      }
+    }
+  },
+  "discover": {
+    "back": "Back",
+    "loading": "Loading questions...",
+    "error_loading": "Failed to load questions. Please try again.",
+    "title": "Discover Your Prakriti",
+    "subtitle": "Answer a few questions to find out your dominant Dosha and receive personalized wellness recommendations.",
+    "main_title": "Discover Your Wellness Path",
+    "main_subtitle": "Choose how you want to begin your personalized Ayurvedic journey.",
+    "opt1_title": "Take the Prakriti Quiz",
+    "opt1_desc": "Answer a few guided questions to identify your Ayurvedic body constitution.",
+    "opt2_title": "I Already Know My Dosha",
+    "opt2_desc": "Select your dosha directly and continue to your personalized dashboard.",
+    "start_quiz": "Start Quiz",
+    "btn_next": "Next",
+    "btn_finish": "See Results",
+    "quiz": {
+      "question_label": "Question",
+      "which_best": "Which best describes your",
+      "previous": "Previous",
+      "next_question": "Next Question",
+      "see_result": "See My Result",
+      "loading": "Loading questions...",
+      "element_vata": "Air & Space",
+      "element_pitta": "Fire & Water",
+      "element_kapha": "Earth & Water",
+      "quality_vata_0": "Creative",
+      "quality_vata_1": "Quick-minded",
+      "quality_vata_2": "Enthusiastic",
+      "quality_vata_3": "Variable",
+      "quality_pitta_0": "Driven",
+      "quality_pitta_1": "Focused",
+      "quality_pitta_2": "Intense",
+      "quality_pitta_3": "Transformative",
+      "quality_kapha_0": "Calm",
+      "quality_kapha_1": "Stable",
+      "quality_kapha_2": "Nurturing",
+      "quality_kapha_3": "Enduring"
+    },
+    "result": {
+      "title": "Your Dosha Result",
+      "loading": "Saving results...",
+      "dominant": "Your dominant dosha is",
+      "vata": "Vata",
+      "pitta": "Pitta",
+      "kapha": "Kapha",
+      "go_dashboard": "Go to Dashboard",
+      "desc_vata": "Vata is associated with movement, lightness, creativity, and variability.",
+      "desc_pitta": "Pitta is associated with heat, sharpness, intensity, and transformation.",
+      "desc_kapha": "Kapha is associated with stability, strength, calmness, and endurance.",
+      "identified": "Constitution Identified",
+      "element": "Element",
+      "retake": "Retake quiz",
+      "enter_dashboard": "Enter Dashboard"
+    }
+  },
+  "dashboard": {
+    "title": "Your Wellness Dashboard",
+    "profile": "Profile",
+    "mode_manual": "manual",
+    "mode_quiz": "quiz",
+    "primary_focus": "Primary Focus",
+    "focus": {
+      "vata": "Grounding and warming balance",
+      "pitta": "Cooling and calming balance",
+      "kapha": "Light and energizing balance"
+    },
+    "logout": "Log Out",
+    "loading": "Loading your personalized recommendations...",
+    "user": "User",
+    "aligning": "Aligning your wellness plan...",
+    "pending": "Synchronization Pending",
+    "footer": "MarinZen 🌿 Modern Wellness",
+    "desc_quiz": "Personalized suggestions based on your body-mind analysis.",
+    "desc_manual": "Wellness recommendations tailored to your selected constitution.",
+    "sections": {
+      "diet": "Diet",
+      "yoga": "Yoga",
+      "skincare": "Skincare",
+      "haircare": "Haircare",
+      "herbs": "Herbs",
+      "routine": "Daily Routine"
+    }
+  }
+}

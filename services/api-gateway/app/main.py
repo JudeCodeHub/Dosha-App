@@ -2,8 +2,13 @@ import os
 import httpx
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import Response
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("api-gateway")
 
 # Load environment variables
 load_dotenv()
@@ -24,53 +29,87 @@ app.add_middleware(
 )
 
 # Service URLs
-AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL")
-QUIZ_SERVICE_URL = os.getenv("QUIZ_SERVICE_URL")
-RESULT_SERVICE_URL = os.getenv("RESULT_SERVICE_URL")
-
-# Basic validation (optional but recommended)
-if not all([AUTH_SERVICE_URL, QUIZ_SERVICE_URL, RESULT_SERVICE_URL]):
-    # Provide local defaults if not set in environment (for easier development)
-    AUTH_SERVICE_URL = AUTH_SERVICE_URL or "http://127.0.0.1:8003"
-    QUIZ_SERVICE_URL = QUIZ_SERVICE_URL or "http://127.0.0.1:8001"
-    RESULT_SERVICE_URL = RESULT_SERVICE_URL or "http://127.0.0.1:8002"
+AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL") or "http://auth-service:8000"
+QUIZ_SERVICE_URL = os.getenv("QUIZ_SERVICE_URL") or "http://quiz-service:8000"
+RESULT_SERVICE_URL = os.getenv("RESULT_SERVICE_URL") or "http://result-service:8000"
 
 
 @app.get("/")
 def read_root():
-    """Health check endpoint for the API Gateway."""
     return {"message": "API Gateway is running"}
 
+
 async def proxy_request(url: str, request: Request):
-    """Generic proxy handler for service-to-service communication."""
     async with httpx.AsyncClient(timeout=10.0) as client:
         method = request.method
-        content = await request.body()
         headers = dict(request.headers)
         
         # Remove host header to avoid issues with target service
         headers.pop("host", None)
+        # Remove content-length to prevent mismatch when forwarding JSON
+        headers.pop("content-length", None)
         
         try:
-            response = await client.request(
-                method,
-                url,
-                content=content,
-                headers=headers,
-                params=request.query_params
-            )
-            return JSONResponse(
-                content=response.json() if response.headers.get("content-type") == "application/json" else response.text,
-                status_code=response.status_code
+            logger.info(f"Forwarding {method} request to {url}")
+            
+            # Forward JSON body specifically for POST/PUT/PATCH methods if applicable
+            if method in ["POST", "PUT", "PATCH"]:
+                try:
+                    body_json = await request.json()
+                    response = await client.request(
+                        method,
+                        url,
+                        json=body_json,
+                        headers=headers,
+                        params=request.query_params
+                    )
+                except Exception:
+                    # Fallback to direct bytes forwarding if empty or parsing fails
+                    content = await request.body()
+                    response = await client.request(
+                        method,
+                        url,
+                        content=content,
+                        headers=headers,
+                        params=request.query_params
+                    )
+            else:
+                content = await request.body()
+                response = await client.request(
+                    method,
+                    url,
+                    content=content,
+                    headers=headers,
+                    params=request.query_params
+                )
+                
+            logger.info(f"Received {response.status_code} from {url}")
+            
+            resp_headers = dict(response.headers)
+            # Remove hop-by-hop headers that might cause issues
+            resp_headers.pop("content-length", None)
+            resp_headers.pop("content-encoding", None)
+            
+            return Response(
+                content=response.content,
+                status_code=response.status_code,
+                headers=resp_headers
             )
         except httpx.RequestError as exc:
+            logger.error(f"Request error forwarding to {url}: {str(exc)}")
             raise HTTPException(status_code=503, detail=f"Service unavailable: {str(exc)}")
         except Exception as exc:
             raise HTTPException(status_code=500, detail=str(exc))
 
+
+# ---------------------
+# Service Proxies
+# ---------------------
+
 # Auth Service Proxy
 @app.api_route("/auth/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def proxy_auth(path: str, request: Request):
+    # Forward /auth/login → /auth/login on auth-service
     return await proxy_request(f"{AUTH_SERVICE_URL}/auth/{path}", request)
 
 # Quiz Service Proxy
@@ -83,7 +122,10 @@ async def proxy_quiz(path: str, request: Request):
 async def proxy_result(path: str, request: Request):
     return await proxy_request(f"{RESULT_SERVICE_URL}/recommendations/{path}", request)
 
+# ---------------------
 # Backward Compatibility / Legacy Routes
+# ---------------------
+
 @app.get("/api/questions")
 async def get_questions(request: Request):
     return await proxy_request(f"{QUIZ_SERVICE_URL}/questions", request)

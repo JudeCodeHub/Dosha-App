@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from fastapi.middleware.cors import CORSMiddleware
-from app.questions import questions
+from app.questions import questions_map
 
 app = FastAPI(
     title="MarinZen Quiz Service",
@@ -22,6 +22,8 @@ def read_root():
     return {"message": "Quiz Service is running"}
 
 @app.get("/questions")
-def get_questions():
+def get_questions(x_language: str = Header(default="en")):
     """Returns the list of Dosha quiz questions."""
+    lang_val = x_language.lower()
+    questions = questions_map.get(lang_val, questions_map["en"])
     return {"questions": questions}

@@ -6,9 +6,11 @@ import DoshaCard from "@/components/discover/DoshaCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { savePersonalization } from "@/utils/personalizationStorage";
 import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
 
 export const DiscoverPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleDoshaSelect = async (dosha) => {
 
@@ -64,7 +66,7 @@ export const DiscoverPage = () => {
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
-          Back
+          {t('discover.back')}
         </Button>
       </div>
 
@@ -73,10 +75,10 @@ export const DiscoverPage = () => {
         {/* Header */}
         <div className="mb-14 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-amber-400 to-orange-500 mb-4 tracking-tight">
-            Discover Your Wellness Path
+            {t('discover.main_title', 'Discover Your Wellness Path')}
           </h1>
           <p className="text-stone-600 dark:text-stone-400 text-lg md:text-xl max-w-2xl mx-auto">
-            Choose how you want to begin your personalized Ayurvedic journey.
+            {t('discover.main_subtitle', 'Choose how you want to begin your personalized Ayurvedic journey.')}
           </p>
         </div>
 
@@ -85,8 +87,8 @@ export const DiscoverPage = () => {
           
           {/* Option 1: Take Quiz */}
           <DiscoveryOptionCard 
-            title="Take the Prakriti Quiz" 
-            description="Answer a few guided questions to identify your Ayurvedic body constitution."
+            title={t('discover.opt1_title', 'Take the Prakriti Quiz')} 
+            description={t('discover.opt1_desc', 'Answer a few guided questions to identify your Ayurvedic body constitution.')}
           >
             <Button 
               onClick={() => {
@@ -95,31 +97,34 @@ export const DiscoverPage = () => {
               }}
               className="w-full h-14 bg-linear-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white rounded-xl text-lg font-semibold shadow-lg shadow-teal-900/30 transition-all duration-300 hover:scale-[1.02] border-0 mt-4 group"
             >
-              Start Quiz
+              {t('discover.start_quiz', 'Start Quiz')}
               <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </DiscoveryOptionCard>
 
           {/* Option 2: Direct Selection */}
           <DiscoveryOptionCard 
-            title="I Already Know My Dosha" 
-            description="Select your dosha directly and continue to your personalized dashboard."
+            title={t('discover.opt2_title', 'I Already Know My Dosha')} 
+            description={t('discover.opt2_desc', 'Select your dosha directly and continue to your personalized dashboard.')}
           >
             <div className="flex gap-3 justify-between mt-4">
               <DoshaCard 
                 dosha="Vata" 
+                label={t('doshas.vata', 'Vata')}
                 icon="🌬️" 
                 colorClass="bg-violet-900/40 text-violet-400" 
                 onClick={handleDoshaSelect} 
               />
               <DoshaCard 
                 dosha="Pitta" 
+                label={t('doshas.pitta', 'Pitta')}
                 icon="🔥" 
                 colorClass="bg-orange-900/40 text-orange-400" 
                 onClick={handleDoshaSelect} 
               />
               <DoshaCard 
                 dosha="Kapha" 
+                label={t('doshas.kapha', 'Kapha')}
                 icon="🌿" 
                 colorClass="bg-teal-900/40 text-teal-400" 
                 onClick={handleDoshaSelect} 

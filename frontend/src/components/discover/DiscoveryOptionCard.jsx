@@ -8,7 +8,7 @@ export const DiscoveryOptionCard = ({ title, description, children }) => {
         {description}
       </p>
       
-      {/* Dynamic Content Area (Buttons, Cards, etc.) */}
+      
       <div className="w-full flex-1 flex flex-col justify-end">
         {children}
       </div>

@@ -1,8 +1,8 @@
 import os
 from datetime import datetime, timezone, timedelta
-from typing import List, Literal
+from typing import List, Literal, Optional
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -72,10 +72,26 @@ def read_root():
     return {"message": "Result Service is running"}
 
 @app.get("/recommendations/{dosha}")
-def get_recommendations(dosha: str, db: Session = Depends(get_db), user_id: str = Depends(verify_access_token)):
+def get_recommendations(
+    dosha: str, 
+    db: Session = Depends(get_db), 
+    user_id: str = Depends(verify_access_token),
+    x_language: str = Header(default="en")
+):
     """Fetches personalized recommendations based on the user's dominant Dosha."""
     dosha_lower = dosha.lower()
-    row = db.query(Recommendation).filter(Recommendation.dosha == dosha_lower).first()
+    lang_lower = x_language.lower()
+    
+    row = db.query(Recommendation).filter(
+        Recommendation.dosha == dosha_lower,
+        Recommendation.language == lang_lower
+    ).first()
+    
+    if not row and lang_lower != 'en':
+        row = db.query(Recommendation).filter(
+            Recommendation.dosha == dosha_lower,
+            Recommendation.language == 'en'
+        ).first()
     
     if not row:
         return {}

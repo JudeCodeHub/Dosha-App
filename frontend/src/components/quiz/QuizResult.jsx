@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { savePersonalization } from "@/utils/personalizationStorage";
 import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
 
 const doshaDescriptions = {
   vata: "Vata is associated with movement, lightness, creativity, and variability.",
@@ -44,6 +45,7 @@ const doshaConfig = {
 
 const QuizResult = ({ result, scores, onRestart }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const config = doshaConfig[result];
 
   const handleFinish = async () => {
@@ -90,25 +92,25 @@ const QuizResult = ({ result, scores, onRestart }) => {
             </div>
 
             <div className={`inline-block px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-4 border ${config.badge}`}>
-              Constitution Identified
+              {t('discover.result.identified', 'Constitution Identified')}
             </div>
 
             <h1 className={`text-5xl font-black bg-linear-to-r ${config.gradient} bg-clip-text text-transparent mb-4 capitalize tracking-tighter`}>
-              {result}
+              {t(`doshas.${result.toLowerCase()}`, result)}
             </h1>
 
             <p className="text-zinc-600 dark:text-stone-400 text-md leading-relaxed max-w-sm mx-auto mb-8">
-              {doshaDescriptions[result]}
+              {t(`discover.result.desc_${result.toLowerCase()}`, doshaDescriptions[result.toLowerCase()] || "")}
             </p>
 
             <div className="flex flex-col items-center gap-3">
                <div className={`inline-flex items-center gap-2 text-xs font-bold ${config.text} ${config.softBg} border ${config.border} px-5 py-2 rounded-full`}>
-                 {config.element} Element
+                 {t(`discover.quiz.element_${result.toLowerCase()}`, config.element)} {t('discover.result.element', 'Element')}
                </div>
-               <div className="flex flex-wrap justify-center gap-3 mt-1">
-                 {config.qualities.map((q) => (
+                <div className="flex flex-wrap justify-center gap-3 mt-1">
+                 {config.qualities.map((q, idx) => (
                    <span key={q} className="text-[11px] font-medium text-stone-500">
-                     • {q}
+                     • {t(`discover.quiz.quality_${result.toLowerCase()}_${idx}`, q)}
                    </span>
                  ))}
                </div>
@@ -122,14 +124,14 @@ const QuizResult = ({ result, scores, onRestart }) => {
               variant="ghost"
               className="rounded-full px-6 h-12 font-bold text-stone-500 hover:text-stone-900"
             >
-              Retake quiz
+              {t('discover.result.retake', 'Retake quiz')}
             </Button>
 
             <Button
               onClick={handleFinish}
               className={`rounded-full px-10 h-12 font-bold text-white bg-linear-to-r ${config.gradient} shadow-lg hover:scale-105 active:scale-95 transition-all border-0`}
             >
-              Enter Dashboard
+              {t('discover.result.enter_dashboard', 'Enter Dashboard')}
             </Button>
           </div>
         </div>

@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { AuthInput } from "./AuthInput";
 import { Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -14,11 +16,11 @@ export const LoginForm = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.email) {
-      newErrors.email = "Email is required";
+      newErrors.email = t('auth.login.errors.email_req');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email format is invalid";
+      newErrors.email = t('auth.login.errors.email_inv');
     }
-    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.password) newErrors.password = t('auth.login.errors.password_req');
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -37,7 +39,7 @@ export const LoginForm = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          setErrors({ submit: errorData.detail || "Login failed" });
+          setErrors({ submit: errorData.detail || t('auth.login.errors.failed') });
           return;
         }
 
@@ -61,7 +63,7 @@ export const LoginForm = () => {
 
       } catch (error) {
         console.error("Login request failed:", error);
-        setErrors({ submit: "A network error occurred. Please try again." });
+        setErrors({ submit: t('auth.login.errors.network') });
       } finally {
         setIsLoading(false);
       }
@@ -83,26 +85,26 @@ export const LoginForm = () => {
         </div>
       )}
       <AuthInput
-        label="Email Address"
+        label={t('auth.login.email_label')}
         id="email"
         type="email"
-        placeholder="you@example.com"
+        placeholder={t('auth.login.email_placeholder')}
         value={formData.email}
         onChange={handleChange}
         error={errors.email}
       />
       <AuthInput
-        label="Password"
+        label={t('auth.login.password_label')}
         id="password"
         type="password"
-        placeholder="Enter your password"
+        placeholder={t('auth.login.password_placeholder')}
         value={formData.password}
         onChange={handleChange}
         error={errors.password}
       />
       <div className="w-full flex justify-end mb-6">
         <button type="button" className="text-sm text-amber-500 hover:text-amber-400">
-          Forgot password?
+          {t('auth.login.forgot_password')}
         </button>
       </div>
       <Button 
@@ -113,10 +115,10 @@ export const LoginForm = () => {
         {isLoading ? (
           <>
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            Logging in...
+            {t('auth.login.logging_in')}
           </>
         ) : (
-          "Sign In"
+          t('auth.login.sign_in')
         )}
       </Button>
     </form>

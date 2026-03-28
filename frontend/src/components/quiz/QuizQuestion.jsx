@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Dosha color config
 const doshaConfig = {
@@ -10,7 +11,7 @@ const doshaConfig = {
     ring: "ring-violet-400",
     text: "text-violet-700 dark:text-violet-400",
     dot: "bg-violet-500",
-    label: "🌬️ Vata",
+    icon: "🌬️",
   },
   pitta: {
     border: "border-orange-400",
@@ -18,7 +19,7 @@ const doshaConfig = {
     ring: "ring-orange-400",
     text: "text-orange-700 dark:text-orange-400",
     dot: "bg-orange-500",
-    label: "🔥 Pitta",
+    icon: "🔥",
   },
   kapha: {
     border: "border-teal-400",
@@ -26,7 +27,7 @@ const doshaConfig = {
     ring: "ring-teal-400",
     text: "text-teal-700 dark:text-teal-400",
     dot: "bg-teal-500",
-    label: "🌿 Kapha",
+    icon: "🌿",
   },
 };
 
@@ -39,12 +40,13 @@ const QuizQuestion = ({
   onNext,
   onPrev,
 }) => {
+  const { t } = useTranslation();
   if (!question) {
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-3xl shadow-lg shadow-zinc-200/60 dark:shadow-stone-900/60 overflow-hidden transition-colors duration-300 p-8">
         <div className="text-center text-zinc-600 dark:text-stone-400">
-          Loading question...
+          {t('discover.quiz.loading', 'Loading question...')}
         </div>
       </div>
     </div>
@@ -62,7 +64,7 @@ const QuizQuestion = ({
         <div className="px-8 pt-8 pb-5">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-stone-500">
-              Question
+              {t('discover.quiz.question_label', 'Question')}
             </span>
             <span className="text-xs font-bold text-zinc-600 dark:text-stone-400 tabular-nums">
               {currentQuestionIndex + 1}
@@ -84,7 +86,7 @@ const QuizQuestion = ({
             {question.question}
           </div>
           <h2 className="text-2xl font-bold text-zinc-900 dark:text-stone-100 leading-snug">
-            Which best describes your{" "}
+            {t('discover.quiz.which_best', 'Which best describes your')}{" "}
             <span className="text-amber-600 dark:text-amber-400">
               {question.question?.toLowerCase()}
             </span>
@@ -154,7 +156,7 @@ const QuizQuestion = ({
                     <span
                       className={`inline-block mt-1.5 text-xs font-semibold tracking-wide ${dosha.text}`}
                     >
-                      {dosha.label}
+                      {dosha.icon} {t(`doshas.${doshaKey}`, doshaKey.charAt(0).toUpperCase() + doshaKey.slice(1))}
                     </span>
                   )}
                 </div>
@@ -172,7 +174,7 @@ const QuizQuestion = ({
             className="flex items-center gap-2 h-11 px-4 rounded-xl border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-stone-400 hover:bg-zinc-50 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-stone-200 disabled:opacity-30 transition-all duration-200"
           >
             <ChevronLeft className="h-4 w-4" />
-            Previous
+            {t('discover.quiz.previous', 'Previous')}
           </Button>
 
           <Button
@@ -180,7 +182,7 @@ const QuizQuestion = ({
             disabled={!selectedAnswer}
             className="flex items-center gap-2 h-11 px-5 rounded-xl bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold shadow-md shadow-orange-200/50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-100 border-0"
           >
-            {isLast ? "See My Result" : "Next Question"}
+            {isLast ? t('discover.quiz.see_result', 'See My Result') : t('discover.quiz.next_question', 'Next Question')}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

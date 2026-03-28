@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const QuizIntro = ({ onStart }) => {
+  const { t } = useTranslation();
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center">
      
@@ -32,25 +34,24 @@ const QuizIntro = ({ onStart }) => {
         {/* Badge */}
         <div className="relative inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5 border border-amber-200 dark:border-amber-700/50">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-          Ayurvedic Assessment
+          {t('quiz.intro.badge', 'Ayurvedic Assessment')}
         </div>
 
         {/* Title */}
         <h1 className="relative text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-stone-100 leading-tight mb-4">
-          Discover Your{" "}
+          {t('quiz.intro.title_discover', 'Discover Your ')}
           <span className="bg-linear-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-            Prakriti
+            {t('quiz.intro.title_prakriti', 'Prakriti')}
           </span>
         </h1>
 
         {/* Subtitle */}
         <p className="relative text-zinc-600 dark:text-stone-400 text-lg leading-relaxed max-w-md mx-auto mb-3">
-          Uncover your unique mind-body constitution rooted in the ancient
-          wisdom of{" "}
-          <span className="font-medium text-zinc-800 dark:text-stone-300">Ayurveda</span>.
+          {t('quiz.intro.subtitle_p1', 'Uncover your unique mind-body constitution rooted in the ancient wisdom of ')}
+          <span className="font-medium text-zinc-800 dark:text-stone-300">{t('quiz.intro.subtitle_p2', 'Ayurveda')}</span>.
         </p>
         <p className="relative text-zinc-500 dark:text-stone-500 text-sm mb-10">
-          21 questions &nbsp;·&nbsp; ~5 minutes &nbsp;·&nbsp; Free & personalized
+          {t('quiz.intro.meta', '21 questions  ·  ~5 minutes  ·  Free & personalized')}
         </p>
 
         {/* CTA Button */}
@@ -59,7 +60,7 @@ const QuizIntro = ({ onStart }) => {
           size="lg"
           className="relative bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold px-10 py-6 rounded-2xl text-base shadow-lg shadow-orange-300/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-orange-300/60 active:scale-100 border-0"
         >
-          Begin Your Journey
+          {t('quiz.intro.cta', 'Begin Your Journey')}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="ml-2 w-5 h-5"
@@ -75,13 +76,13 @@ const QuizIntro = ({ onStart }) => {
         {/* Dosha pills */}
         <div className="relative mt-10 flex justify-center gap-3 flex-wrap">
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400 border border-violet-200 dark:border-violet-700/50">
-            🌬️ Vata
+            🌬️ {t('doshas.vata', 'Vata')}
           </span>
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-700/50">
-            🔥 Pitta
+            🔥 {t('doshas.pitta', 'Pitta')}
           </span>
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 border border-teal-200 dark:border-teal-700/50">
-            🌿 Kapha
+            🌿 {t('doshas.kapha', 'Kapha')}
           </span>
         </div>
       </div>

@@ -11,9 +11,11 @@ import AuthPage from "@/pages/AuthPage";
 import DiscoverPage from "@/pages/DiscoverPage";
 import DashboardPage from "@/pages/DashboardPage";
 import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
 
 const QuizModule = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
  
   const [quizStarted, setQuizStarted] = useState(() => {
     try {
@@ -50,7 +52,12 @@ const QuizModule = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/questions`, { signal: controller.signal });
+        const response = await fetch(`${API_BASE_URL}/api/questions`, { 
+          signal: controller.signal,
+          headers: {
+            "X-Language": i18n.language || "en",
+          }
+        });
         
         clearTimeout(timeoutId);
 
@@ -80,7 +87,7 @@ const QuizModule = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [i18n.language]);
 
   // Persist state to localStorage on every change
   useEffect(() => {
@@ -179,16 +186,16 @@ const QuizModule = () => {
           <QuizIntro onStart={handleStartQuiz} />
         ) : loading ? (
           <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">Loading questions...</h2>
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">{t('discover.quiz.loading', 'Loading questions...')}</h2>
           </div>
         ) : error ? (
           <div className="text-center p-8 bg-rose-50/80 dark:bg-rose-900/30 backdrop-blur-md border border-rose-200 dark:border-rose-800/50 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
             <h2 className="text-2xl font-bold text-rose-800 dark:text-rose-200 mb-4">{error}</h2>
-            <Button onClick={() => window.location.reload()} variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-100">Try Again</Button>
+            <Button onClick={() => window.location.reload()} variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-100">{t('discover.quiz.try_again', 'Try Again')}</Button>
           </div>
         ) : questions.length === 0 ? (
           <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">No questions found!</h2>
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">{t('discover.quiz.no_questions', 'No questions found!')}</h2>
           </div>
         ) : !quizFinished ? (
           <QuizQuestion

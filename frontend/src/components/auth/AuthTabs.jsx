@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
+import { useTranslation } from "react-i18next";
 
 export const AuthTabs = () => {
   const [activeTab, setActiveTab] = useState("login");
+  const { t } = useTranslation();
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -17,7 +19,7 @@ export const AuthTabs = () => {
               : "text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
           }`}
         >
-          Login
+          {t('auth.tabs.login')}
         </button>
         <button
           onClick={() => setActiveTab("signup")}
@@ -27,7 +29,7 @@ export const AuthTabs = () => {
               : "text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
           }`}
         >
-          Sign Up
+          {t('auth.tabs.signup')}
         </button>
       </div>
 
