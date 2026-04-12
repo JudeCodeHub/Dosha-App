@@ -19,7 +19,7 @@ export const AuthTabs = () => {
               : "text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
           }`}
         >
-          {t('auth.tabs.login')}
+          {t("auth.tabs.login")}
         </button>
         <button
           onClick={() => setActiveTab("signup")}
@@ -29,7 +29,7 @@ export const AuthTabs = () => {
               : "text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
           }`}
         >
-          {t('auth.tabs.signup')}
+          {t("auth.tabs.signup")}
         </button>
       </div>
 

@@ -6,18 +6,16 @@ import taTranslations from "./locales/ta.json";
 
 const savedLang = localStorage.getItem("marinZenLang") || "en";
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: { translation: enTranslations },
-      ta: { translation: taTranslations },
-    },
-    lng: savedLang,
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translation: enTranslations },
+    ta: { translation: taTranslations },
+  },
+  lng: savedLang,
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;

@@ -23,9 +23,9 @@ export const DiscoverPage = () => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ dosha: selectedDosha })
+          body: JSON.stringify({ dosha: selectedDosha }),
         });
       }
     } catch (error) {
@@ -36,18 +36,16 @@ export const DiscoverPage = () => {
     savePersonalization({
       mode: "manual",
       dominantDosha: dosha,
-      scores: { vata: null, pitta: null, kapha: null }
+      scores: { vata: null, pitta: null, kapha: null },
     });
     navigate("/dashboard");
   };
 
   return (
     <main className="min-h-screen px-4 py-16 sm:py-24 flex flex-col items-center justify-center relative overflow-y-auto overflow-x-hidden w-full">
-      {/* Background glows */}
       <div className="pointer-events-none absolute top-0 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full bg-teal-900/10 blur-3xl opacity-50" />
       <div className="pointer-events-none absolute bottom-0 left-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full bg-orange-900/10 blur-3xl opacity-40" />
 
-      {/* Back button */}
       <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-50">
         <Button
           variant="ghost"
@@ -56,50 +54,72 @@ export const DiscoverPage = () => {
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
-          {t('discover.back')}
+          {t("discover.back")}
         </Button>
       </div>
 
-      {/* Main Container */}
       <div className="w-full max-w-5xl z-10 flex flex-col items-center">
-        {/* Header */}
         <div className="mb-10 sm:mb-14 text-center px-2">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-amber-400 to-orange-500 mb-3 sm:mb-4 tracking-tight">
-            {t('discover.main_title', 'Discover Your Wellness Path')}
+            {t("discover.main_title", "Discover Your Wellness Path")}
           </h1>
           <p className="text-stone-600 dark:text-stone-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
-            {t('discover.main_subtitle', 'Choose how you want to begin your personalized Ayurvedic journey.')}
+            {t(
+              "discover.main_subtitle",
+              "Choose how you want to begin your personalized Ayurvedic journey.",
+            )}
           </p>
         </div>
 
-        {/* Option Cards — stack on mobile, side-by-side on md+ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 w-full px-2 sm:px-4">
-          {/* Option 1: Quiz */}
           <DiscoveryOptionCard
-            title={t('discover.opt1_title', 'Take the Prakriti Quiz')}
-            description={t('discover.opt1_desc', 'Answer a few guided questions to identify your Ayurvedic body constitution.')}
+            title={t("discover.opt1_title", "Take the Prakriti Quiz")}
+            description={t(
+              "discover.opt1_desc",
+              "Answer a few guided questions to identify your Ayurvedic body constitution.",
+            )}
           >
             <Button
               onClick={() => {
                 localStorage.removeItem("prakritiQuizState");
-                navigate('/quiz');
+                navigate("/quiz");
               }}
               className="w-full h-12 sm:h-14 bg-linear-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white rounded-xl text-base sm:text-lg font-semibold shadow-lg shadow-teal-900/30 transition-all duration-300 hover:scale-[1.02] border-0 mt-4 group"
             >
-              {t('discover.start_quiz', 'Start Quiz')}
+              {t("discover.start_quiz", "Start Quiz")}
               <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </DiscoveryOptionCard>
 
-          {/* Option 2: Direct Selection */}
           <DiscoveryOptionCard
-            title={t('discover.opt2_title', 'I Already Know My Dosha')}
-            description={t('discover.opt2_desc', 'Select your dosha directly and continue to your personalized dashboard.')}
+            title={t("discover.opt2_title", "I Already Know My Dosha")}
+            description={t(
+              "discover.opt2_desc",
+              "Select your dosha directly and continue to your personalized dashboard.",
+            )}
           >
             <div className="flex gap-2 sm:gap-3 justify-between mt-4">
-              <DoshaCard dosha="Vata" label={t('doshas.vata', 'Vata')} icon="🌬️" colorClass="bg-violet-900/40 text-violet-400" onClick={handleDoshaSelect} />
-              <DoshaCard dosha="Pitta" label={t('doshas.pitta', 'Pitta')} icon="🔥" colorClass="bg-orange-900/40 text-orange-400" onClick={handleDoshaSelect} />
-              <DoshaCard dosha="Kapha" label={t('doshas.kapha', 'Kapha')} icon="🌿" colorClass="bg-teal-900/40 text-teal-400" onClick={handleDoshaSelect} />
+              <DoshaCard
+                dosha="Vata"
+                label={t("doshas.vata", "Vata")}
+                icon="🌬️"
+                colorClass="bg-violet-900/40 text-violet-400"
+                onClick={handleDoshaSelect}
+              />
+              <DoshaCard
+                dosha="Pitta"
+                label={t("doshas.pitta", "Pitta")}
+                icon="🔥"
+                colorClass="bg-orange-900/40 text-orange-400"
+                onClick={handleDoshaSelect}
+              />
+              <DoshaCard
+                dosha="Kapha"
+                label={t("doshas.kapha", "Kapha")}
+                icon="🌿"
+                colorClass="bg-teal-900/40 text-teal-400"
+                onClick={handleDoshaSelect}
+              />
             </div>
           </DiscoveryOptionCard>
         </div>

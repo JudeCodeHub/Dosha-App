@@ -7,11 +7,8 @@ export const DiscoveryOptionCard = ({ title, description, children }) => {
       <p className="text-stone-600 dark:text-stone-400 mb-8 leading-relaxed">
         {description}
       </p>
-      
-      
-      <div className="w-full flex-1 flex flex-col justify-end">
-        {children}
-      </div>
+
+      <div className="w-full flex-1 flex flex-col justify-end">{children}</div>
     </div>
   );
 };

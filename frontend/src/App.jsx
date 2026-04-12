@@ -15,30 +15,38 @@ import { useTranslation } from "react-i18next";
 const QuizModule = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
- 
+
   const [quizStarted, setQuizStarted] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
-      return s ? JSON.parse(s).quizStarted ?? false : false;
-    } catch { return false; }
+      return s ? (JSON.parse(s).quizStarted ?? false) : false;
+    } catch {
+      return false;
+    }
   });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
-      return s ? JSON.parse(s).currentQuestionIndex ?? 0 : 0;
-    } catch { return 0; }
+      return s ? (JSON.parse(s).currentQuestionIndex ?? 0) : 0;
+    } catch {
+      return 0;
+    }
   });
   const [answers, setAnswers] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
-      return s ? JSON.parse(s).answers ?? [] : [];
-    } catch { return []; }
+      return s ? (JSON.parse(s).answers ?? []) : [];
+    } catch {
+      return [];
+    }
   });
   const [quizFinished, setQuizFinished] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
-      return s ? JSON.parse(s).quizFinished ?? false : false;
-    } catch { return false; }
+      return s ? (JSON.parse(s).quizFinished ?? false) : false;
+    } catch {
+      return false;
+    }
   });
 
   const [questions, setQuestions] = useState([]);
@@ -51,13 +59,13 @@ const QuizModule = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/questions`, { 
+        const response = await fetch(`${API_BASE_URL}/api/questions`, {
           signal: controller.signal,
           headers: {
             "X-Language": i18n.language || "en",
-          }
+          },
         });
-        
+
         clearTimeout(timeoutId);
 
         if (response.ok) {
@@ -65,17 +73,25 @@ const QuizModule = () => {
           if (Array.isArray(data.questions)) {
             setQuestions(data.questions);
           } else {
-            console.error("Malformed API response: 'questions' should be an array.");
-            setError("The quiz service returned invalid data. Please try again.");
+            console.error(
+              "Malformed API response: 'questions' should be an array.",
+            );
+            setError(
+              "The quiz service returned invalid data. Please try again.",
+            );
           }
         } else {
-          console.error(`Failed to load questions: ${response.status} ${response.statusText}`);
+          console.error(
+            `Failed to load questions: ${response.status} ${response.statusText}`,
+          );
           setError("Failed to load questions from backend. Please try again.");
         }
       } catch (err) {
-        if (err.name === 'AbortError') {
+        if (err.name === "AbortError") {
           console.error("Quiz questions fetch timed out.");
-          setError("The request timed out. Please check your connection and try again.");
+          setError(
+            "The request timed out. Please check your connection and try again.",
+          );
         } else {
           console.error("Error fetching questions:", err);
           setError("Error connecting to the backend API.");
@@ -92,7 +108,12 @@ const QuizModule = () => {
   useEffect(() => {
     localStorage.setItem(
       "prakritiQuizState",
-      JSON.stringify({ quizStarted, currentQuestionIndex, answers, quizFinished })
+      JSON.stringify({
+        quizStarted,
+        currentQuestionIndex,
+        answers,
+        quizFinished,
+      }),
     );
   }, [quizStarted, currentQuestionIndex, answers, quizFinished]);
 
@@ -119,7 +140,6 @@ const QuizModule = () => {
 
   const handlePrev = () => {
     if (quizFinished) {
-     
       setQuizFinished(false);
       return;
     }
@@ -148,7 +168,7 @@ const QuizModule = () => {
 
   const getDominantDosha = (scores) => {
     return Object.keys(scores).reduce((a, b) =>
-      scores[a] >= scores[b] ? a : b
+      scores[a] >= scores[b] ? a : b,
     );
   };
 
@@ -165,12 +185,10 @@ const QuizModule = () => {
 
   return (
     <main className="min-h-screen px-3 sm:px-4 pt-16 sm:pt-20 pb-10 flex flex-col items-center justify-center relative overflow-x-hidden w-full">
-      {/* Decorative blobs */}
       <div className="pointer-events-none absolute -top-32 -left-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-violet-200/30 dark:bg-violet-900/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-orange-200/30 dark:bg-orange-900/20 blur-3xl" />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] rounded-full bg-amber-100/20 dark:bg-amber-900/10 blur-3xl" />
 
-      {/* Inline Back Component — replaces global BackButton */}
       {quizStarted && (
         <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-50">
           <Button
@@ -190,16 +208,28 @@ const QuizModule = () => {
           <QuizIntro onStart={handleStartQuiz} />
         ) : loading ? (
           <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">{t('discover.quiz.loading', 'Loading questions...')}</h2>
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">
+              {t("discover.quiz.loading", "Loading questions...")}
+            </h2>
           </div>
         ) : error ? (
           <div className="text-center p-8 bg-rose-50/80 dark:bg-rose-900/30 backdrop-blur-md border border-rose-200 dark:border-rose-800/50 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-rose-800 dark:text-rose-200 mb-4">{error}</h2>
-            <Button onClick={() => window.location.reload()} variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-100">{t('discover.quiz.try_again', 'Try Again')}</Button>
+            <h2 className="text-2xl font-bold text-rose-800 dark:text-rose-200 mb-4">
+              {error}
+            </h2>
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              className="border-rose-200 text-rose-700 hover:bg-rose-100"
+            >
+              {t("discover.quiz.try_again", "Try Again")}
+            </Button>
           </div>
         ) : questions.length === 0 ? (
           <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
-            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">{t('discover.quiz.no_questions', 'No questions found!')}</h2>
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">
+              {t("discover.quiz.no_questions", "No questions found!")}
+            </h2>
           </div>
         ) : !quizFinished ? (
           <QuizQuestion
@@ -212,7 +242,11 @@ const QuizModule = () => {
             onPrev={handlePrev}
           />
         ) : (
-          <QuizResult result={result} scores={scores} onRestart={handleRestart} />
+          <QuizResult
+            result={result}
+            scores={scores}
+            onRestart={handleRestart}
+          />
         )}
       </div>
     </main>

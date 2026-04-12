@@ -12,7 +12,14 @@ import React, { useState } from "react";
  *   profile  – dosha profile object ({ gradient, accent, accentLight })
  *   index    – position in grid (used for stagger animation delay)
  */
-const RecommendationSection = ({ title, subtitle, content, icon, profile, index = 0 }) => {
+const RecommendationSection = ({
+  title,
+  subtitle,
+  content,
+  icon,
+  profile,
+  index = 0,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   if (!content) return null;
@@ -24,8 +31,9 @@ const RecommendationSection = ({ title, subtitle, content, icon, profile, index 
     .filter((l) => l.length > 0);
 
   const PREVIEW_COUNT = 4;
-  const hasMore       = rawLines.length > PREVIEW_COUNT;
-  const visibleLines  = hasMore && !expanded ? rawLines.slice(0, PREVIEW_COUNT) : rawLines;
+  const hasMore = rawLines.length > PREVIEW_COUNT;
+  const visibleLines =
+    hasMore && !expanded ? rawLines.slice(0, PREVIEW_COUNT) : rawLines;
 
   const delayMs = index * 80;
 
@@ -35,11 +43,13 @@ const RecommendationSection = ({ title, subtitle, content, icon, profile, index 
       style={{ animationDelay: `${delayMs}ms` }}
     >
       {/* Top gradient accent bar */}
-      <div className="h-[3px] w-full flex-shrink-0" style={{ background: profile.gradient }} />
+      <div
+        className="h-[3px] w-full flex-shrink-0"
+        style={{ background: profile.gradient }}
+      />
 
       {/* Card body */}
       <div className="p-6 flex flex-col flex-1">
-
         {/* ── Header ── */}
         <div className="flex items-start gap-4 mb-5">
           {/* Icon bubble */}
