@@ -61,6 +61,14 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         data={"sub": str(user.id), "email": user.email}
     )
 
+    scores = None
+    if user.vata_score is not None and user.pitta_score is not None and user.kapha_score is not None:
+        scores = {
+            "vata": user.vata_score,
+            "pitta": user.pitta_score,
+            "kapha": user.kapha_score
+        }
+
     return LoginResponse(
         access_token=access_token,
         token_type="bearer",
@@ -68,6 +76,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         name=user.name,
         email=user.email,
         dosha=user.dosha,
+        scores=scores,
     )
 
 
@@ -84,6 +93,10 @@ def update_dosha(
         raise HTTPException(status_code=404, detail="User not found")
 
     user.dosha = payload.dosha
+    if payload.scores:
+        user.vata_score = payload.scores.get("vata")
+        user.pitta_score = payload.scores.get("pitta")
+        user.kapha_score = payload.scores.get("kapha")
 
     db.commit()
     db.refresh(user)

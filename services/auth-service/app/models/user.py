@@ -16,6 +16,10 @@ class User(Base):
 
     dosha = Column(String, nullable=True)
 
+    vata_score = Column(Integer, nullable=True)
+    pitta_score = Column(Integer, nullable=True)
+    kapha_score = Column(Integer, nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

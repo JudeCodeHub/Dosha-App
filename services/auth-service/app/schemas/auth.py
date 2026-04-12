@@ -26,7 +26,9 @@ class LoginResponse(BaseModel):
     name: str
     email: EmailStr
     dosha: str | None = None
+    scores: dict[str, int] | None = None
 
 
 class UpdateDoshaRequest(BaseModel):
     dosha: str
+    scores: dict[str, int] | None = None

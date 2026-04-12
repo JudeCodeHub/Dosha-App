@@ -5,6 +5,7 @@ import { AuthInput } from "./AuthInput";
 import { Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/config/api";
 import { useTranslation } from "react-i18next";
+import { savePersonalization } from "@/utils/personalizationStorage";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -54,6 +55,15 @@ export const LoginForm = () => {
 
         if (data.dosha) {
           localStorage.setItem("marinZenUserDosha", data.dosha);
+
+          if (data.scores) {
+            savePersonalization({
+              mode: "quiz",
+              dominantDosha: data.dosha.charAt(0).toUpperCase() + data.dosha.slice(1).toLowerCase(),
+              scores: data.scores,
+            });
+          }
+
           navigate("/dashboard");
         } else {
           // Ensure we don't have leftover stale dosha if backend says null

@@ -60,7 +60,7 @@ const QuizResult = ({ result, scores, onRestart }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ dosha: result.toLowerCase() }),
+          body: JSON.stringify({ dosha: result.toLowerCase(), scores }),
         });
       } catch (err) {
         console.error("Failed to sync Dosha to server:", err);
