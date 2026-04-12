@@ -31,3 +31,11 @@ services:
     volumes:
       - ./services/result-service:/app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  task-service:
+    build: ./services/task-service
+    ports:
+      - "8004:8000"
+    volumes:
+      - ./services/task-service:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

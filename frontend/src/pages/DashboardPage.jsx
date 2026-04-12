@@ -414,31 +414,21 @@ export const DashboardPage = () => {
             </p>
           </div>
 
-          {content && Object.keys(content).length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {DASHBOARD_SECTIONS.map((s, idx) => {
-                const text = content?.[s.key] || content?.[s.altKey];
-                if (!text) return null;
-                return (
-                  <RecommendationSection
-                    key={s.key}
-                    title={t(`dashboard.sections.${s.titleKey}`, s.titleFb)}
-                    subtitle={s.sub}
-                    content={text}
-                    icon={s.icon}
-                    profile={profile}
-                    index={idx}
-                  />
-                );
-              })}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {DASHBOARD_SECTIONS.filter((s) =>
+                ["diet", "yoga", "routine"].includes(s.key),
+              ).map((s, idx) => (
+                <RecommendationSection
+                  key={s.key}
+                  title={t(`dashboard.sections.${s.titleKey}`, s.titleFb)}
+                  subtitle={s.sub}
+                  icon={s.icon}
+                  profile={profile}
+                  index={idx}
+                  onClick={() => navigate(`/category/${s.key}`)}
+                />
+              ))}
             </div>
-          ) : (
-            <div className="py-20 text-center">
-              <p className="text-stone-400 text-sm">
-                {t("dashboard.no_recs", "Recommendations are being prepared.")}
-              </p>
-            </div>
-          )}
         </div>
       </div>
 

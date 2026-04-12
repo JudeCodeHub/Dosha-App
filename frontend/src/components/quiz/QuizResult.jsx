@@ -67,8 +67,17 @@ const QuizResult = ({ result, scores, onRestart }) => {
           },
           body: JSON.stringify({ dosha: result.toLowerCase(), scores }),
         });
+
+        // Also ping the result-service to destroy any currently cached tasks for today
+        // so that they are strictly regenerated based on the newly calculated dosha.
+        await fetch(`${API_BASE_URL}/tasks/reset`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } catch (err) {
-        console.error("Failed to sync Dosha to server:", err);
+        console.error("Failed to sync Dosha or reset tasks:", err);
       }
     }
 

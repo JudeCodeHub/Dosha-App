@@ -5,18 +5,18 @@ from dotenv import load_dotenv
 
 from app.database import engine
 from app.models import Base
-from app.routers import quiz, recommendations, tasks
+from app.routers import tasks
 
 # Load environment variables
 load_dotenv()
 
-# Initialize Database
+# Initialize Database — creates the task_tracking table if it doesn't exist
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="MarinZen Result Service",
-    description="Service for tracking behavior, calculating Dosha results, and providing recommendations",
-    version="2.0.0",
+    title="MarinZen Task Service",
+    description="Dedicated microservice for daily personalized task generation and tracking",
+    version="1.0.0",
 )
 
 # Configure CORS
@@ -29,12 +29,10 @@ app.add_middleware(
 )
 
 # Register Routers
-app.include_router(quiz.router)
-app.include_router(recommendations.router)
 app.include_router(tasks.router)
 
 
 @app.get("/")
 def read_root():
-    """Health check endpoint for the Result Service."""
-    return {"message": "Result Service v2.0 is running with Task Tracking support"}
+    """Health check endpoint for the Task Service."""
+    return {"message": "Task Service v1.0 is running"}

@@ -9,6 +9,9 @@ import IntroPage from "@/pages/IntroPage";
 import AuthPage from "@/pages/AuthPage";
 import DiscoverPage from "@/pages/DiscoverPage";
 import DashboardPage from "@/pages/DashboardPage";
+import DietPage from "@/pages/DietPage";
+import YogaPage from "@/pages/YogaPage";
+import RoutinePage from "@/pages/RoutinePage";
 import { API_BASE_URL } from "@/config/api";
 import { useTranslation } from "react-i18next";
 
@@ -263,6 +266,9 @@ const App = () => {
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/quiz" element={<QuizModule />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/category/diet" element={<DietPage />} />
+          <Route path="/category/yoga" element={<YogaPage />} />
+          <Route path="/category/routine" element={<RoutinePage />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -16,5 +16,5 @@ class Recommendation(Base):
     routine = Column(Text, nullable=True)
 
     __table_args__ = (
-        UniqueConstraint('dosha', 'language', name='uix_dosha_language'),
+        UniqueConstraint("dosha", "language", name="uix_dosha_language"),
     )

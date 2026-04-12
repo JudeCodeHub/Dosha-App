@@ -68,7 +68,7 @@ const QuizQuestion = ({
         <div className="px-5 sm:px-8 pb-5 sm:pb-6 space-y-2 sm:space-y-3">
           {question.options.map((option, index) => {
             const doshaKey = option.dosha ? option.dosha.toLowerCase() : "";
-            const dosha = doshaConfig[doshaKey];
+            const dosha = QUIZ_QUESTION_CONFIG[doshaKey];
             const isSelected = selectedAnswer === doshaKey;
             return (
               <button

@@ -32,6 +32,7 @@ app.add_middleware(
 AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL") or "http://auth-service:8000"
 QUIZ_SERVICE_URL = os.getenv("QUIZ_SERVICE_URL") or "http://quiz-service:8000"
 RESULT_SERVICE_URL = os.getenv("RESULT_SERVICE_URL") or "http://result-service:8000"
+TASK_SERVICE_URL = os.getenv("TASK_SERVICE_URL") or "http://task-service:8000"
 
 
 @app.get("/")
@@ -122,6 +123,11 @@ async def proxy_quiz(path: str, request: Request):
 async def proxy_result(path: str, request: Request):
     return await proxy_request(f"{RESULT_SERVICE_URL}/recommendations/{path}", request)
 
+# Task Tracking Proxy — routed to dedicated Task Service
+@app.api_route("/tasks/{path:path}", methods=["GET", "POST", "PATCH", "DELETE"])
+async def proxy_tasks(path: str, request: Request):
+    return await proxy_request(f"{TASK_SERVICE_URL}/tasks/{path}", request)
+
 # ---------------------
 # Backward Compatibility / Legacy Routes
 # ---------------------
@@ -132,4 +138,4 @@ async def get_questions(request: Request):
 
 @app.post("/api/result")
 async def calculate_result(request: Request):
-    return await proxy_request(f"{RESULT_SERVICE_URL}/calculate-result", request)
+    return await proxy_request(f"{RESULT_SERVICE_URL}/quiz/calculate-result", request)
