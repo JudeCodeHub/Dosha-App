@@ -7,6 +7,7 @@ export function LanguageSelector() {
   const toggleLanguage = () => {
     const nextLang = i18n.language === "en" ? "ta" : "en";
     i18n.changeLanguage(nextLang);
+    localStorage.setItem("marinZenLang", nextLang);
   };
 
   return (

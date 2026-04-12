@@ -118,6 +118,11 @@ const QuizModule = () => {
   };
 
   const handlePrev = () => {
+    if (quizFinished) {
+     
+      setQuizFinished(false);
+      return;
+    }
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
     } else {

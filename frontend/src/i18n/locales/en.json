@@ -151,6 +151,8 @@
       "kapha": "Light and energizing balance"
     },
     "logout": "Log Out",
+    "retake_quiz": "Retake Quiz",
+    "sign_out": "Sign Out",
     "loading": "Loading your personalized recommendations...",
     "user": "User",
     "aligning": "Aligning your wellness plan...",
@@ -159,12 +161,29 @@
     "desc_quiz": "Personalized suggestions based on your body-mind analysis.",
     "desc_manual": "Wellness recommendations tailored to your selected constitution.",
     "sections": {
-      "diet": "Diet",
-      "yoga": "Yoga",
-      "skincare": "Skincare",
-      "haircare": "Haircare",
-      "herbs": "Herbs",
-      "routine": "Daily Routine"
+      "diet_title": "Dietary Path",
+      "yoga_title": "Movement & Yoga",
+      "skincare_title": "Skin Vitality",
+      "haircare_title": "Lustrous Hair",
+      "herbs_title": "Ancestral Herbs",
+      "routine_title": "Daily Rhythm"
+    },
+    "greeting_morning": "Ayubowan, Good Morning",
+    "greeting_afternoon": "Ayubowan, Good Afternoon",
+    "greeting_evening": "Ayubowan, Good Evening",
+    "wellness_sanctuary": "Your Wellness Sanctuary",
+    "wellness_plan": "Your Wellness Plan",
+    "blueprint_label": "Your Personalised Wellness Blueprint",
+    "blueprint_title": "Ancient Wisdom, Modern Living",
+    "blueprint_desc": "Ayurvedic guidance rooted in Sri Lankan tradition, aligned with your",
+    "blueprint_constitution": "constitution",
+    "loading_text": "Going to the dashboard...",
+    "no_recs": "Recommendations are being prepared.",
+    "footer_tagline": "Rooted in Sri Lankan Ayurvedic Tradition",
+    "profiles": {
+      "vata": { "element": "Air & Space", "tagline": "Creative · Dynamic · Ethereal", "description": "As a Vata type, you embody the qualities of air and space — creative, quick-thinking, and always in motion. Your path to balance lies in warmth, grounding routines, and nourishing practices.", "mantra": "Sthira Sukham Asanam" },
+      "pitta": { "element": "Fire & Water", "tagline": "Focused · Passionate · Transformative", "description": "As a Pitta type, you carry the fire of transformation — sharp intellect, strong digestion, and natural leadership. Balance comes through cooling foods, serene environments, and self-compassion.", "mantra": "Shanti Shanti Shanti" },
+      "kapha": { "element": "Earth & Water", "tagline": "Nurturing · Steady · Abundant", "description": "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.", "mantra": "Tejasvi Navadhitamastu" }
     }
   }
 }

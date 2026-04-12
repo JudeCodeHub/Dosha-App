@@ -4,22 +4,20 @@ import { initReactI18next } from "react-i18next";
 import enTranslations from "./locales/en.json";
 import taTranslations from "./locales/ta.json";
 
+const savedLang = localStorage.getItem("marinZenLang") || "en";
+
 i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: {
-        translation: enTranslations
-      },
-      ta: {
-        translation: taTranslations
-      }
+      en: { translation: enTranslations },
+      ta: { translation: taTranslations },
     },
-    lng: "en", // Default language
+    lng: savedLang,
     fallbackLng: "en",
     interpolation: {
-      escapeValue: false // React already safes from xss
-    }
+      escapeValue: false,
+    },
   });
 
 export default i18n;
