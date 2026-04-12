@@ -81,55 +81,54 @@ const QuizResult = ({ result, scores, onRestart }) => {
   };
 
   return (
-    <div className="fixed inset-0 w-full h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 p-4 overflow-hidden">
-      <div className="w-full max-w-xl animate-in fade-in zoom-in duration-500">
-        <div className="relative bg-white/90 dark:bg-stone-900/50 backdrop-blur-2xl border border-zinc-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden text-center">
+    <div className="fixed inset-0 w-full h-screen flex items-center justify-center bg-stone-50 dark:bg-stone-950 p-3 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-xl my-auto animate-in fade-in zoom-in duration-500">
+        <div className="relative bg-white/90 dark:bg-stone-900/50 backdrop-blur-2xl border border-zinc-200 dark:border-white/10 rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden text-center">
           <div className={`absolute -top-24 -left-24 w-64 h-64 rounded-full blur-[80px] opacity-20 bg-linear-to-br ${config.gradient}`} />
-          
-          <div className="relative px-6 py-10 sm:py-14">
-            <div className={`mx-auto mb-6 w-24 h-24 rounded-3xl bg-linear-to-br ${config.gradient} flex items-center justify-center text-5xl shadow-xl`}>
+
+          <div className="relative px-5 sm:px-6 py-8 sm:py-10 md:py-14">
+            <div className={`mx-auto mb-5 sm:mb-6 w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-linear-to-br ${config.gradient} flex items-center justify-center text-4xl sm:text-5xl shadow-xl`}>
               {config.emoji}
             </div>
 
-            <div className={`inline-block px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-4 border ${config.badge}`}>
+            <div className={`inline-block px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] mb-3 sm:mb-4 border ${config.badge}`}>
               {t('discover.result.identified', 'Constitution Identified')}
             </div>
 
-            <h1 className={`text-5xl font-black bg-linear-to-r ${config.gradient} bg-clip-text text-transparent mb-4 capitalize tracking-tighter`}>
+            <h1 className={`text-4xl sm:text-5xl font-black bg-linear-to-r ${config.gradient} bg-clip-text text-transparent mb-3 sm:mb-4 capitalize tracking-tighter`}>
               {t(`doshas.${result.toLowerCase()}`, result)}
             </h1>
 
-            <p className="text-zinc-600 dark:text-stone-400 text-md leading-relaxed max-w-sm mx-auto mb-8">
+            <p className="text-zinc-600 dark:text-stone-400 text-sm sm:text-md leading-relaxed max-w-sm mx-auto mb-6 sm:mb-8 px-2">
               {t(`discover.result.desc_${result.toLowerCase()}`, doshaDescriptions[result.toLowerCase()] || "")}
             </p>
 
             <div className="flex flex-col items-center gap-3">
-               <div className={`inline-flex items-center gap-2 text-xs font-bold ${config.text} ${config.softBg} border ${config.border} px-5 py-2 rounded-full`}>
-                 {t(`discover.quiz.element_${result.toLowerCase()}`, config.element)} {t('discover.result.element', 'Element')}
-               </div>
-                <div className="flex flex-wrap justify-center gap-3 mt-1">
-                 {config.qualities.map((q, idx) => (
-                   <span key={q} className="text-[11px] font-medium text-stone-500">
-                     • {t(`discover.quiz.quality_${result.toLowerCase()}_${idx}`, q)}
-                   </span>
-                 ))}
-               </div>
+              <div className={`inline-flex items-center gap-2 text-xs font-bold ${config.text} ${config.softBg} border ${config.border} px-5 py-2 rounded-full`}>
+                {t(`discover.quiz.element_${result.toLowerCase()}`, config.element)} {t('discover.result.element', 'Element')}
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-1">
+                {config.qualities.map((q, idx) => (
+                  <span key={q} className="text-[11px] font-medium text-stone-500">
+                    • {t(`discover.quiz.quality_${result.toLowerCase()}_${idx}`, q)}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Action Area */}
-          <div className="bg-stone-50/50 dark:bg-white/5 border-t border-zinc-100 dark:border-white/10 p-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="bg-stone-50/50 dark:bg-white/5 border-t border-zinc-100 dark:border-white/10 p-4 sm:p-6 flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={onRestart}
               variant="ghost"
-              className="rounded-full px-6 h-12 font-bold text-stone-500 hover:text-stone-900"
+              className="w-full sm:w-auto rounded-full px-6 h-11 sm:h-12 font-bold text-stone-500 hover:text-stone-900"
             >
               {t('discover.result.retake', 'Retake quiz')}
             </Button>
-
             <Button
               onClick={handleFinish}
-              className={`rounded-full px-10 h-12 font-bold text-white bg-linear-to-r ${config.gradient} shadow-lg hover:scale-105 active:scale-95 transition-all border-0`}
+              className={`w-full sm:w-auto rounded-full px-8 sm:px-10 h-11 sm:h-12 font-bold text-white bg-linear-to-r ${config.gradient} shadow-lg hover:scale-105 active:scale-95 transition-all border-0`}
             >
               {t('discover.result.enter_dashboard', 'Enter Dashboard')}
             </Button>
@@ -138,6 +137,7 @@ const QuizResult = ({ result, scores, onRestart }) => {
       </div>
     </div>
   );
+
 };
 
 export default QuizResult;

@@ -142,31 +142,31 @@ export const DashboardPage = () => {
 
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl border-b border-stone-200/60 dark:border-stone-800/60 shadow-sm" : "bg-transparent"}`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-3 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-3 items-center">
           {/* Left — Brand */}
           <div className="flex items-center gap-2">
             <Leaf className="w-4 h-4" style={{ color: profile.accent }} />
             <span className="font-semibold tracking-tight text-stone-800 dark:text-stone-200" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.15rem" }}>MarinZen</span>
           </div>
 
-          {/* Centre — Dosha pill */}
+          {/* Centre — Dosha pill (hidden on very small screens, shown from xs up) */}
           <div className="flex justify-center">
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border" style={{ borderColor: profile.accentLight, background: `${profile.accent}0d` }}>
-              <span className="text-lg">{profile.icon}</span>
-              <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: profile.accent }}>{dosha}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border" style={{ borderColor: profile.accentLight, background: `${profile.accent}0d` }}>
+              <span className="text-base sm:text-lg">{profile.icon}</span>
+              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest" style={{ color: profile.accent }}>{dosha}</span>
             </div>
           </div>
 
           {/* Right — Actions */}
-          <div className="flex items-center gap-3 justify-end">
+          <div className="flex items-center gap-1.5 sm:gap-3 justify-end">
             <button onClick={retake} title="Retake Assessment"
-              className="flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all">
-              <RefreshCcw className="w-3.5 h-3.5" />
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border text-[10px] sm:text-xs font-semibold uppercase tracking-wider border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all">
+              <RefreshCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span className="hidden sm:inline">{t("dashboard.retake_quiz", "Retake Quiz")}</span>
             </button>
             <button onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all">
-              <LogOut className="w-3.5 h-3.5" />
+              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all">
+              <LogOut className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span className="hidden sm:inline">{t("dashboard.sign_out", "Sign Out")}</span>
             </button>
           </div>
@@ -185,37 +185,37 @@ export const DashboardPage = () => {
         <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full blur-3xl pointer-events-none" style={{ background: profile.accent, opacity: 0.08 }} />
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none" style={{ background: profile.accent, opacity: 0.06 }} />
 
-        <div className="relative max-w-4xl mx-auto px-6 pt-36 pb-28 text-center">
-          <p className="text-xs font-semibold tracking-[0.3em] uppercase mb-8 text-stone-400">{t(getGreetingKey())} &nbsp;✦&nbsp; {t("dashboard.wellness_sanctuary", "Your Wellness Sanctuary")}</p>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24 md:pb-28 text-center">
+          <p className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase mb-6 sm:mb-8 text-stone-400">{t(getGreetingKey())} &nbsp;✦&nbsp; {t("dashboard.wellness_sanctuary", "Your Wellness Sanctuary")}</p>
 
           {/* Dosha badge */}
-          <div className="inline-flex items-center gap-5 px-8 py-5 rounded-3xl mb-8 border" style={{ background: `${profile.accent}10`, borderColor: `${profile.accent}30` }}>
-            <span className="text-6xl drop-shadow-md" role="img" aria-label={dosha}>{profile.icon}</span>
+          <div className="inline-flex items-center gap-3 sm:gap-5 px-5 sm:px-8 py-3 sm:py-5 rounded-2xl sm:rounded-3xl mb-6 sm:mb-8 border" style={{ background: `${profile.accent}10`, borderColor: `${profile.accent}30` }}>
+            <span className="text-4xl sm:text-6xl drop-shadow-md" role="img" aria-label={dosha}>{profile.icon}</span>
             <div className="text-left">
-              <h1 className="leading-none capitalize font-bold" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(3rem,8vw,5rem)", background: profile.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              <h1 className="leading-none capitalize font-bold" style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(2rem,8vw,5rem)", background: profile.gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                 {dosha}
               </h1>
               <p className="text-[10px] font-bold tracking-[0.35em] uppercase mt-1 text-stone-400">{t(`dashboard.profiles.${dosha}.element`, profile.element)}</p>
             </div>
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-300 mb-2" style={{ fontFamily: "'Cormorant Garamond',serif" }}>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-300 mb-2" style={{ fontFamily: "'Cormorant Garamond',serif" }}>
             Hi, <em className="not-italic font-semibold">{displayName}</em>
           </h2>
-          <p className="text-xs tracking-[0.25em] uppercase text-stone-400 mb-8">{t(`dashboard.profiles.${dosha}.tagline`, profile.tagline)}</p>
-          <p className="text-sm text-stone-600 dark:text-stone-400 max-w-xl mx-auto leading-loose mb-12">{t(`dashboard.profiles.${dosha}.description`, profile.description)}</p>
+          <p className="text-[10px] sm:text-xs tracking-[0.25em] uppercase text-stone-400 mb-6 sm:mb-8">{t(`dashboard.profiles.${dosha}.tagline`, profile.tagline)}</p>
+          <p className="text-sm text-stone-600 dark:text-stone-400 max-w-xl mx-auto leading-loose mb-8 sm:mb-12 px-2">{t(`dashboard.profiles.${dosha}.description`, profile.description)}</p>
 
           {/* Score rings */}
           {total > 0 && scores && (
-            <div className="flex items-center justify-center gap-8 flex-wrap mb-12">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap mb-8 sm:mb-12">
               {Object.entries(scores).map(([name, score]) => {
                 const pct  = Math.round(((score || 0) / total) * 100);
                 const isDom = name.toLowerCase() === dosha;
                 const dp   = PROFILES[name.toLowerCase()];
                 return (
                   <div key={name} className="flex flex-col items-center gap-2">
-                    <div className="relative w-16 h-16">
-                      <svg viewBox="0 0 36 36" className="w-16 h-16 -rotate-90" aria-hidden>
+                    <div className="relative w-14 h-14 sm:w-16 sm:h-16">
+                      <svg viewBox="0 0 36 36" className="w-14 h-14 sm:w-16 sm:h-16 -rotate-90" aria-hidden>
                         <circle cx="18" cy="18" r="14" fill="none" stroke="#e5e7eb" strokeWidth="2.5" />
                         <circle cx="18" cy="18" r="14" fill="none" stroke={dp?.accent || "#aaa"}
                           strokeWidth={isDom ? 3.5 : 2} strokeDasharray={`${pct * 0.88} 100`}
@@ -241,9 +241,9 @@ export const DashboardPage = () => {
       <div className="h-[3px] w-full" style={{ background: profile.gradient }} />
 
       {/* Recommendation cards */}
-      <div className="bg-stone-50 dark:bg-stone-950 py-24 px-6">
+      <div className="bg-stone-50 dark:bg-stone-950 py-12 sm:py-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 sm:mb-16">
             <p className="text-[10px] font-bold tracking-[0.35em] uppercase mb-4" style={{ color: profile.accent }}>{t("dashboard.blueprint_label", "Your Personalised Wellness Blueprint")}</p>
             <h2 className="text-4xl md:text-5xl text-stone-800 dark:text-stone-100 mb-4" style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 600 }}>{t("dashboard.blueprint_title", "Ancient Wisdom, Modern Living")}</h2>
             <p className="text-sm text-stone-500 dark:text-stone-400 max-w-lg mx-auto leading-relaxed">

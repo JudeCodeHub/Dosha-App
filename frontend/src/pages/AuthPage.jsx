@@ -10,7 +10,7 @@ export const AuthPage = () => {
   const { t } = useTranslation();
 
   return (
-    <main className="px-4 flex flex-col items-center justify-center relative overflow-hidden w-full h-full">
+    <main className="min-h-screen px-4 py-16 sm:py-0 flex flex-col items-center justify-center relative overflow-y-auto overflow-x-hidden w-full">
       {/* Background glow effects */}
       <div className="pointer-events-none absolute -top-40 -right-20 w-[600px] h-[600px] rounded-full bg-amber-900/10 blur-3xl opacity-60" />
       <div className="pointer-events-none absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-orange-900/10 blur-3xl opacity-40" />

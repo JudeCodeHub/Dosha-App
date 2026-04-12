@@ -164,15 +164,15 @@ const QuizModule = () => {
   const result = getDominantDosha(scores);
 
   return (
-    <main className="px-4 pt-20 pb-10 flex items-center justify-center relative overflow-hidden h-full w-full">
-      {/* Decorative background blobs */}
-      <div className="pointer-events-none absolute -top-32 -left-32 w-96 h-96 rounded-full bg-violet-200/30 dark:bg-violet-900/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-orange-200/30 dark:bg-orange-900/20 blur-3xl" />
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-100/20 dark:bg-amber-900/10 blur-3xl" />
+    <main className="min-h-screen px-3 sm:px-4 pt-16 sm:pt-20 pb-10 flex flex-col items-center justify-center relative overflow-x-hidden w-full">
+      {/* Decorative blobs */}
+      <div className="pointer-events-none absolute -top-32 -left-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-violet-200/30 dark:bg-violet-900/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-orange-200/30 dark:bg-orange-900/20 blur-3xl" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] rounded-full bg-amber-100/20 dark:bg-amber-900/10 blur-3xl" />
 
       {/* Inline Back Component — replaces global BackButton */}
       {quizStarted && (
-        <div className="absolute top-6 left-6 z-50">
+        <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-50">
           <Button
             variant="ghost"
             size="sm"
