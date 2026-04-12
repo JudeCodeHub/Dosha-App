@@ -3,32 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const doshaConfig = {
-  vata: {
-    border: "border-violet-400",
-    bg: "bg-violet-50 dark:bg-violet-900/20",
-    ring: "ring-violet-400",
-    text: "text-violet-700 dark:text-violet-400",
-    dot: "bg-violet-500",
-    icon: "🌬️",
-  },
-  pitta: {
-    border: "border-orange-400",
-    bg: "bg-orange-50 dark:bg-orange-900/20",
-    ring: "ring-orange-400",
-    text: "text-orange-700 dark:text-orange-400",
-    dot: "bg-orange-500",
-    icon: "🔥",
-  },
-  kapha: {
-    border: "border-teal-400",
-    bg: "bg-teal-50 dark:bg-teal-900/20",
-    ring: "ring-teal-400",
-    text: "text-teal-700 dark:text-teal-400",
-    dot: "bg-teal-500",
-    icon: "🌿",
-  },
-};
+import { QUIZ_QUESTION_CONFIG } from "@/constants/doshaData";
 
 const QuizQuestion = ({
   question,

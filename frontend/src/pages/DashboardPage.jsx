@@ -2,102 +2,10 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import RecommendationSection from "@/components/dashboard/RecommendationSection";
 import { getPersonalization } from "@/utils/personalizationStorage";
-import { LogOut, Loader2, RefreshCcw, Leaf, ChevronDown } from "lucide-react";
+import { LogOut, RefreshCcw, Leaf, ChevronDown } from "lucide-react";
 import { API_BASE_URL } from "@/config/api";
 import { useTranslation } from "react-i18next";
-
-const PROFILES = {
-  vata: {
-    gradient: "linear-gradient(135deg,#7C3AED,#4F46E5)",
-    heroBg: "linear-gradient(160deg,#F5F3FF,#EDE9FE 40%,#E0E7FF)",
-    heroBgDark: "linear-gradient(160deg,#0f0c1e,#1e1b4b 60%,#1e1047)",
-    accent: "#7C3AED",
-    accentLight: "#DDD6FE",
-    icon: "🌬️",
-    element: "Air & Space",
-    tagline: "Creative · Dynamic · Ethereal",
-    description:
-      "As a Vata type, you embody the qualities of air and space — creative, quick-thinking, and always in motion. Your path to balance lies in warmth, grounding routines, and nourishing practices.",
-    mantra: "Sthira Sukham Asanam",
-  },
-  pitta: {
-    gradient: "linear-gradient(135deg,#EA580C,#DC2626)",
-    heroBg: "linear-gradient(160deg,#FFFBEB,#FFF7ED 40%,#FEF2F2)",
-    heroBgDark: "linear-gradient(160deg,#1a0900,#431407 60%,#450a0a)",
-    accent: "#EA580C",
-    accentLight: "#FED7AA",
-    icon: "🔥",
-    element: "Fire & Water",
-    tagline: "Focused · Passionate · Transformative",
-    description:
-      "As a Pitta type, you carry the fire of transformation — sharp intellect, strong digestion, and natural leadership. Balance comes through cooling foods, serene environments, and self-compassion.",
-    mantra: "Shanti Shanti Shanti",
-  },
-  kapha: {
-    gradient: "linear-gradient(135deg,#0D9488,#059669)",
-    heroBg: "linear-gradient(160deg,#F0FDFA,#ECFDF5 40%,#F0FDF4)",
-    heroBgDark: "linear-gradient(160deg,#021a17,#042f2e 60%,#064e3b)",
-    accent: "#0D9488",
-    accentLight: "#CCFBF1",
-    icon: "🌿",
-    element: "Earth & Water",
-    tagline: "Nurturing · Steady · Abundant",
-    description:
-      "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.",
-    mantra: "Tejasvi Navadhitamastu",
-  },
-};
-
-const SECTIONS = [
-  {
-    key: "diet",
-    altKey: null,
-    icon: "🌾",
-    titleKey: "diet_title",
-    titleFb: "Dietary Path",
-    sub: "Nourishment for your constitution",
-  },
-  {
-    key: "yoga",
-    altKey: null,
-    icon: "🧘",
-    titleKey: "yoga_title",
-    titleFb: "Movement & Yoga",
-    sub: "Body-mind harmony practices",
-  },
-  {
-    key: "skincare",
-    altKey: null,
-    icon: "✨",
-    titleKey: "skincare_title",
-    titleFb: "Skin Vitality",
-    sub: "Radiance rituals",
-  },
-  {
-    key: "haircare",
-    altKey: null,
-    icon: "🥥",
-    titleKey: "haircare_title",
-    titleFb: "Lustrous Hair",
-    sub: "Traditional care wisdom",
-  },
-  {
-    key: "herbs",
-    altKey: "remedies",
-    icon: "🌿",
-    titleKey: "herbs_title",
-    titleFb: "Ancestral Herbs",
-    sub: "Sri Lankan botanical remedies",
-  },
-  {
-    key: "routine",
-    altKey: null,
-    icon: "🌅",
-    titleKey: "routine_title",
-    titleFb: "Daily Rhythm",
-    sub: "Your Dinacharya blueprint",
-  },
-];
+import { DASHBOARD_PROFILES, DASHBOARD_SECTIONS } from "@/constants/doshaData";
 
 const getGreetingKey = () => {
   const h = new Date().getHours();
@@ -237,7 +145,7 @@ export const DashboardPage = () => {
     })();
   }, [dosha, navigate, handleLogout, i18n.language]);
 
-  const profile = dosha ? PROFILES[dosha] : null;
+  const profile = dosha ? DASHBOARD_PROFILES[dosha] : null;
   const scores = personalization?.scores || null;
   const total = scores
     ? Object.values(scores).reduce((a, b) => (a || 0) + (b || 0), 0)
@@ -245,31 +153,7 @@ export const DashboardPage = () => {
 
   if (!dosha || !profile) return null;
 
-  // Loading screen
-  if (loading)
-    return (
-      <div
-        className="min-h-screen flex flex-col items-center justify-center gap-6"
-        style={{
-          background: isDark ? profile.heroBgDark : profile.heroBg,
-          fontFamily: "'DM Sans',sans-serif",
-        }}
-      >
-        <div
-          className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-xl"
-          style={{ background: profile.gradient }}
-        >
-          {profile.icon}
-        </div>
-        <p
-          className="text-xl font-light text-stone-600 dark:text-stone-300"
-          style={{ fontFamily: "'Cormorant Garamond',serif" }}
-        >
-          {t("dashboard.loading_text", "Going to the dashboard...")}
-        </p>
-        <Loader2 className="w-5 h-5 animate-spin text-stone-400" />
-      </div>
-    );
+
 
   const retake = () => {
     if (dosha)
@@ -434,7 +318,7 @@ export const DashboardPage = () => {
               {Object.entries(scores).map(([name, score]) => {
                 const pct = Math.round(((score || 0) / total) * 100);
                 const isDom = name.toLowerCase() === dosha;
-                const dp = PROFILES[name.toLowerCase()];
+                const dp = DASHBOARD_PROFILES[name.toLowerCase()];
                 return (
                   <div key={name} className="flex flex-col items-center gap-2">
                     <div className="relative w-14 h-14 sm:w-16 sm:h-16">
@@ -532,7 +416,7 @@ export const DashboardPage = () => {
 
           {content && Object.keys(content).length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {SECTIONS.map((s, idx) => {
+              {DASHBOARD_SECTIONS.map((s, idx) => {
                 const text = content?.[s.key] || content?.[s.altKey];
                 if (!text) return null;
                 return (
