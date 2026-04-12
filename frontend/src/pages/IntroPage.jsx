@@ -9,8 +9,9 @@ export const IntroPage = () => {
 
   return (
     <main className="px-4 py-20 flex flex-col items-center justify-center relative overflow-hidden w-full h-full">
-      <LanguageSelector />
-      
+      <div className="absolute top-6 right-6 z-50">
+        <LanguageSelector />
+      </div>
       {/* Soft Glow Background Accents */}
       <div className="pointer-events-none absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-orange-900/20 blur-3xl opacity-60" />
       <div className="pointer-events-none absolute bottom-10 right-10 w-[400px] h-[400px] rounded-full bg-amber-900/10 blur-3xl opacity-50" />

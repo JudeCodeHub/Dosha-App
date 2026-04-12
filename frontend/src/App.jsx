@@ -4,7 +4,6 @@ import QuizIntro from "@/components/quiz/QuizIntro";
 import QuizQuestion from "@/components/quiz/QuizQuestion";
 import QuizResult from "@/components/quiz/QuizResult";
 import { ChevronLeft } from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import IntroPage from "@/pages/IntroPage";
 import AuthPage from "@/pages/AuthPage";
@@ -219,11 +218,6 @@ const App = () => {
   return (
     <div className="min-h-screen w-full bg-linear-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950 text-stone-800 dark:text-stone-200 transition-colors duration-300">
       <BrowserRouter>
-        {/* Global Theme Toggle */}
-        <div className="fixed top-4 right-4 z-50">
-          <ThemeToggle />
-        </div>
-
         <Routes>
           <Route path="/" element={<IntroPage />} />
           <Route path="/auth" element={<AuthPage />} />
