@@ -6,7 +6,12 @@ from datetime import date
 logger = logging.getLogger(__name__)
 
 
-def generate_ai_tasks(category: str, vata: float, pitta: float, kapha: float) -> list[str]:
+def generate_ai_tasks(
+    category: str,
+    vata: float,
+    pitta: float,
+    kapha: float,
+) -> list[str]:
     """
     Calls Google Gemini to generate 5 personalized Ayurvedic daily tasks.
 
@@ -34,12 +39,16 @@ def generate_ai_tasks(category: str, vata: float, pitta: float, kapha: float) ->
     category_context = {
         "diet": "food choices, eating habits, and nutrition practices",
         "yoga": "yoga poses, breathing exercises, and mindful movement",
-        "routine": "daily self-care habits, lifestyle rituals, and wellness routines",
+        "routine": (
+            "daily self-care habits, lifestyle rituals, and wellness "
+            "routines"
+        ),
     }.get(category, category)
 
     prompt = f"""You are a certified Ayurvedic wellness expert.
 
-Today is {today_str}. Generate exactly 5 personalized daily tasks for a user with the following dosha profile:
+Today is {today_str}. Generate exactly 5 personalized daily tasks
+for a user with the following dosha profile:
 - Vata: {vata:.1f}%
 - Pitta: {pitta:.1f}%
 - Kapha: {kapha:.1f}%
@@ -48,13 +57,19 @@ Today is {today_str}. Generate exactly 5 personalized daily tasks for a user wit
 
 Rules:
 1. Tasks must be directly related to {category_context}.
-2. Weight the tasks proportionally — roughly {vata:.0f}% Vata-balancing, {pitta:.0f}% Pitta-balancing, and {kapha:.0f}% Kapha-balancing in nature.
-3. Each task must be short, specific, and immediately actionable (10 words or fewer).
-4. Do not repeat generic advice. Be precise (e.g. "Drink warm cumin tea before breakfast" not "Eat healthy").
-5. Do NOT include numbering, bullet points, or explanations — only the task text.
+2. Weight tasks proportionally: about {vata:.0f}% Vata-balancing,
+    {pitta:.0f}% Pitta-balancing, and {kapha:.0f}% Kapha-balancing.
+3. Each task must be short, specific, and actionable
+    (10 words or fewer).
+4. Do not repeat generic advice. Be precise
+    (e.g. "Drink warm cumin tea before breakfast").
+5. Do NOT include numbering, bullet points, or explanations.
+    Return only task text.
 
 Return ONLY a valid JSON array of exactly 5 strings. Nothing else.
-Example format: ["Task one here", "Task two here", "Task three here", "Task four here", "Task five here"]"""
+Example format:
+["Task one here", "Task two here", "Task three here",
+ "Task four here", "Task five here"]"""
 
     try:
         import google.generativeai as genai
