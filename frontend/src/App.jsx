@@ -201,7 +201,7 @@ const QuizModule = () => {
             className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
-            Back
+            {t("quiz_back", "Back")}
           </Button>
         </div>
       )}

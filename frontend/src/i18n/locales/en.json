@@ -180,10 +180,42 @@
     "loading_text": "Going to the dashboard...",
     "no_recs": "Recommendations are being prepared.",
     "footer_tagline": "Rooted in Sri Lankan Ayurvedic Tradition",
+    "explore": "Explore",
+    "back_to_dashboard": "Back to Dashboard",
     "profiles": {
       "vata": { "element": "Air & Space", "tagline": "Creative · Dynamic · Ethereal", "description": "As a Vata type, you embody the qualities of air and space — creative, quick-thinking, and always in motion. Your path to balance lies in warmth, grounding routines, and nourishing practices.", "mantra": "Sthira Sukham Asanam" },
       "pitta": { "element": "Fire & Water", "tagline": "Focused · Passionate · Transformative", "description": "As a Pitta type, you carry the fire of transformation — sharp intellect, strong digestion, and natural leadership. Balance comes through cooling foods, serene environments, and self-compassion.", "mantra": "Shanti Shanti Shanti" },
       "kapha": { "element": "Earth & Water", "tagline": "Nurturing · Steady · Abundant", "description": "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.", "mantra": "Tejasvi Navadhitamastu" }
     }
-  }
+  },
+  "tasks": {
+    "ayurvedic_guidance": "Ayurvedic Guidance",
+    "loading_recs": "Loading recommendations...",
+    "no_recs_for": "Personalized recommendations for your",
+    "no_recs_suffix": "constitution will appear here.",
+    "aligning_plan": "Aligning your plan...",
+    "retry": "Retry",
+    "todays_actions": "Today's Daily Actions",
+    "error_prefix": "Unable to load your",
+    "error_suffix": "plan. Please try again later.",
+    "progress_label": "Daily Progress",
+    "progress_complete": "Complete",
+    "goal_reached": "Goal Reached! ✨",
+    "staying_balanced": "Staying Balanced"
+  },
+  "category": {
+    "diet": {
+      "title": "Dietary Path",
+      "description": "Nourishing your body according to your unique constitution. These daily recommendations help maintain your digestive fire (Agni) and sustain your vitality."
+    },
+    "yoga": {
+      "title": "Yoga & Exercise",
+      "description": "Ancient movement practices designed to balance your specific energy. These sequences focus on stabilizing your unique physiology."
+    },
+    "routine": {
+      "title": "Daily Rhythm",
+      "description": "Your Dinacharya blueprint. Synchronizing your daily actions with the rhythms of nature to promote long-term harmony and health."
+    }
+  },
+  "quiz_back": "Back"
 }

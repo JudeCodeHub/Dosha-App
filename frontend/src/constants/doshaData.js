@@ -49,6 +49,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "🌾",
     titleKey: "diet_title",
     titleFb: "Dietary Path",
+    subKey: "diet_sub",
     sub: "Nourishment for your constitution",
   },
   {
@@ -57,6 +58,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "🧘",
     titleKey: "yoga_title",
     titleFb: "Movement & Yoga",
+    subKey: "yoga_sub",
     sub: "Body-mind harmony practices",
   },
   {
@@ -65,6 +67,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "✨",
     titleKey: "skincare_title",
     titleFb: "Skin Vitality",
+    subKey: "skincare_sub",
     sub: "Radiance rituals",
   },
   {
@@ -73,6 +76,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "🥥",
     titleKey: "haircare_title",
     titleFb: "Lustrous Hair",
+    subKey: "haircare_sub",
     sub: "Traditional care wisdom",
   },
   {
@@ -81,6 +85,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "🌿",
     titleKey: "herbs_title",
     titleFb: "Ancestral Herbs",
+    subKey: "herbs_sub",
     sub: "Sri Lankan botanical remedies",
   },
   {
@@ -89,6 +94,7 @@ export const DASHBOARD_SECTIONS = [
     icon: "🌅",
     titleKey: "routine_title",
     titleFb: "Daily Rhythm",
+    subKey: "routine_sub",
     sub: "Your Dinacharya blueprint",
   },
 ];

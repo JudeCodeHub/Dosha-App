@@ -12,7 +12,7 @@ import TaskList from "@/components/tasks/TaskList";
 
 const TaskTrackingLayout = ({ category, title, description, icon }) => {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -102,7 +102,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
     } catch (err) {
       console.error(err);
       setError(
-        `Unable to load your ${category} plan. Please try again later.`
+        `${t("tasks.error_prefix", "Unable to load your")} ${category} ${t("tasks.error_suffix", "plan. Please try again later.")}`
       );
     } finally {
       setLoading(false);
@@ -170,7 +170,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 mb-6"
         >
           <ChevronLeft className="w-4 h-4" />
-          Back to Dashboard
+          {t("dashboard.back_to_dashboard", "Back to Dashboard")}
         </Button>
       </div>
 
@@ -213,7 +213,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                   className="text-sm font-bold uppercase tracking-widest"
                   style={{ color: profile.accent }}
                 >
-                  Ayurvedic Guidance
+                  {t("tasks.ayurvedic_guidance", "Ayurvedic Guidance")}
                 </h2>
               </div>
 
@@ -222,7 +222,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                 {recLoading ? (
                   <div className="py-12 flex flex-col items-center text-stone-400 gap-3">
                     <Loader2 className="w-6 h-6 animate-spin" />
-                    <p className="text-xs">Loading recommendations...</p>
+                    <p className="text-xs">{t("tasks.loading_recs", "Loading recommendations...")}</p>
                   </div>
                 ) : recLines.length > 0 ? (
                   <ul className="space-y-4" role="list">
@@ -241,14 +241,14 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                   </ul>
                 ) : (
                   <p className="text-stone-400 text-sm text-center py-8 italic">
-                    Personalized recommendations for your{" "}
+                    {t("tasks.no_recs_for", "Personalized recommendations for your")}{" "}
                     <span
                       className="capitalize font-semibold"
                       style={{ color: profile.accent }}
                     >
                       {dosha}
                     </span>{" "}
-                    constitution will appear here.
+                    {t("tasks.no_recs_suffix", "constitution will appear here.")}
                   </p>
                 )}
               </div>
@@ -262,7 +262,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                 <div className="py-16 flex flex-col items-center justify-center text-stone-400 gap-4">
                   <Loader2 className="w-10 h-10 animate-spin" />
                   <p className="text-sm font-medium animate-pulse">
-                    Aligning your plan...
+                    {t("tasks.aligning_plan", "Aligning your plan...")}
                   </p>
                 </div>
               ) : error ? (
@@ -273,7 +273,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                     variant="outline"
                     className="rounded-full"
                   >
-                    Retry
+                    {t("tasks.retry", "Retry")}
                   </Button>
                 </div>
               ) : (
@@ -284,7 +284,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                   />
                   <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-5 sm:p-6">
                     <h2 className="text-base font-semibold text-stone-800 dark:text-stone-100 mb-5">
-                      Today's Daily Actions
+                      {t("tasks.todays_actions", "Today's Daily Actions")}
                     </h2>
                     <TaskList
                       tasks={tasks}

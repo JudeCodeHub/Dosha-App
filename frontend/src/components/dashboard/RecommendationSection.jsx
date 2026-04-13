@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const RecommendationSection = ({
   title,
@@ -8,6 +9,7 @@ const RecommendationSection = ({
   index = 0,
   onClick,
 }) => {
+  const { t } = useTranslation();
   const delayMs = index * 80;
 
   return (
@@ -64,7 +66,7 @@ const RecommendationSection = ({
                 backgroundColor: `${profile.accent}0d`,
               }}
             >
-              Explore {" "}
+              {t("dashboard.explore", "Explore")}{" "}
               <span className="text-sm leading-none transition-transform group-hover:translate-x-1">
                 →
               </span>
