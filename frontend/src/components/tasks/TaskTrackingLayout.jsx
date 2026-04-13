@@ -26,6 +26,14 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
 
   const scores = personalization?.scores || { vata: 33, pitta: 33, kapha: 34 };
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate("/dashboard");
+  };
+
   useEffect(() => {
     const lang = i18n.language || "en";
     const cacheKey = `marinZenRecommendations_${dosha}_${lang}`;
@@ -160,7 +168,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/dashboard")}
+          onClick={handleBack}
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 mb-6"
         >
           <ChevronLeft className="w-4 h-4" />

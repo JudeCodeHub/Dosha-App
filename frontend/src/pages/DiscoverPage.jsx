@@ -12,6 +12,14 @@ export const DiscoverPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate("/auth");
+  };
+
   const handleDoshaSelect = async (dosha) => {
     const userId = localStorage.getItem("userId");
     const selectedDosha = dosha.toLowerCase();
@@ -50,7 +58,7 @@ export const DiscoverPage = () => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/auth")}
+          onClick={handleBack}
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />

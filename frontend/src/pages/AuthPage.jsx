@@ -9,6 +9,14 @@ export const AuthPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate("/");
+  };
+
   return (
     <main className="min-h-screen px-4 py-16 sm:py-0 flex flex-col items-center justify-center relative overflow-y-auto overflow-x-hidden w-full">
       <div className="pointer-events-none absolute -top-40 -right-20 w-[600px] h-[600px] rounded-full bg-amber-900/10 blur-3xl opacity-60" />
@@ -18,7 +26,7 @@ export const AuthPage = () => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/")}
+          onClick={handleBack}
           className="flex items-center gap-2 text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
