@@ -60,17 +60,52 @@ Example format: ["Task one here", "Task two here", "Task three here", "Task four
         import google.generativeai as genai
 
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        configured_model = os.getenv("GEMINI_MODEL", "").strip()
+        model_candidates = [
+            configured_model,
+            "gemini-1.5-flash-latest",
+            "gemini-1.5-flash",
+            "gemini-1.5-pro-latest",
+            "gemini-1.5-pro",
+            "gemini-2.0-flash-exp",
+            "gemini-2.0-flash",
+        ]
+        model_candidates = [m for m in dict.fromkeys(model_candidates) if m]
 
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0.8,       # Some creativity for variety
-                max_output_tokens=256, # 5 short tasks fit easily
-            ),
-        )
+        raw_text = None
+        last_error = None
+        for model_name in model_candidates:
+            try:
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(
+                    prompt,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=0.8,
+                        max_output_tokens=256,
+                    ),
+                )
+                raw_text = (response.text or "").strip()
+                if not raw_text:
+                    raise ValueError("Empty response text")
+                logger.info(
+                    "Gemini generation succeeded with model=%s",
+                    model_name,
+                )
+                break
+            except Exception as model_error:
+                last_error = model_error
+                logger.warning(
+                    "Gemini model %s failed: %s",
+                    model_name,
+                    model_error,
+                )
 
-        raw_text = response.text.strip()
+        if raw_text is None:
+            logger.error(
+                "Gemini task generation failed for all models: %s",
+                last_error,
+            )
+            return []
 
         # Strip markdown code fences if Gemini wraps the output
         if raw_text.startswith("```"):
