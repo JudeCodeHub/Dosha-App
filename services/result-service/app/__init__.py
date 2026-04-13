@@ -1,1 +1,0 @@
-# MarinZen Result Service Package
