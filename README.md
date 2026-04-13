@@ -6,7 +6,7 @@
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-MarinZen is a modern, full-stack wellness application built on a **scalable microservices architecture**. It helps users discover their Ayurvedic body constitution (Dosha - Vata, Pitta, Kapha) through an interactive assessment and provides personalized wellness, diet, and lifestyle recommendations.
+MarinZen is a modern, full-stack wellness application built on a **scalable microservices architecture**. It helps users discover their Ayurvedic body constitution (Dosha - Vata, Pitta, Kapha) through an interactive assessment and provides personalized wellness, diet, and lifestyle recommendations, along with daily task tracking.
 
 It natively supports dynamic, real-time **Bilingual i18n Translation (English & Tamil)** across both the React frontend and Python backend endpoints.
 
@@ -14,10 +14,11 @@ It natively supports dynamic, real-time **Bilingual i18n Translation (English & 
 
 ## ✨ Features
 - **Prakriti Quiz Engine**: 21-question fast assessment tool to determine your primary Dosha.
-- **Microservices Backend**: Dedicated, containerized FastAPI services orchestrating Routing, Authentication, Quizzes, and Result generation.
+- **Task Tracking System**: Dedicated service for managing personalized daily wellness tasks.
+- **Microservices Backend**: Containerized FastAPI services orchestrating Routing, Authentication, Quizzes, Recommendations, and Tasks.
 - **Bilingual Support (Tamil & English)**: Real-time UI updates and backend payload transitions using custom HTTP `X-Language` headers and `react-i18next`.
 - **JWT Authentication**: Secure user login and registration protocols using encrypted tokens.
-- **Responsive Glassmorphism UI**: High-end UX utilizing TailwindCSS variants and Lucide icons.
+- **Responsive Glassmorphism UI**: High-end UX utilizing Tailwind CSS v4, Lucide icons, and shadcn/ui components.
 
 ## 🏗️ Architecture Overview
 
@@ -35,21 +36,23 @@ The project relies entirely on **Docker Compose** to run distinct microservices.
                                   |    (FastAPI)      |
                                   +----+----+----+----+
                                        |    |    |
-            +--------------------------+    |    +--------------------------+
-            |                               |                               |
-            v (Port 8001)                   v (Port 8002)                   v (Port 8003)
-  +---------+---------+           +---------+---------+           +---------+---------+
-  |   Quiz Service    |           |  Result Service   |           |   Auth Service    |
-  |    (FastAPI)      |           |    (FastAPI)      |           |    (FastAPI)      |
-  +-------------------+           +-------------------+           +-------------------+
-                       (Internal Docker Network strictly isolating sub-services)
+         +-----------------------------+    |    +-----------------------------+
+         |                                  |                                  |
+         |         +------------------------+--------+                         |
+         |         |                                 |                         |
+         v         v                                 v                         v
++--------+--------+ +--------+--------+ +------------+---------+  +------------+---------+
+|  Quiz Service   | | Result Service  | |    Auth Service      |  |    Task Service      |
+|    (Port 8001)  | |   (Port 8002)   | |      (Port 8003)     |  |      (Port 8004)     |
++-----------------+ +-----------------+ +----------------------+  +----------------------+
+          (Internal Docker Network strictly isolating sub-services)
 ```
 
 ## 🚀 Tech Stack
 
-- **Frontend**: React 18, Vite, Tailwind CSS, `react-i18next`, `lucide-react`
-- **Backend / Microservices**: FastAPI, Uvicorn (Python)
-- **Data Persistence**: SQLAlchemy / SQLModel, Neon Serverless PostgreSQL instances (or local SQLite)
+- **Frontend**: React 19, Vite, Tailwind CSS v4, `react-i18next`, `lucide-react`, `shadcn/ui`
+- **Backend / Microservices**: FastAPI, Uvicorn, Python 3.11
+- **Data Persistence**: SQLAlchemy, PostgreSQL
 - **Containerization**: Docker & Docker Compose
 
 ---
@@ -65,25 +68,26 @@ Anyone can securely clone and boot this environment locally.
 
 ### 2. Clone the Repository
 ```bash
-git clone https://github.com/your-username/prakriti-dosha.git
+git clone https://github.com/JudeCodeHub/Dosha-App.git
 cd prakriti-dosha
 ```
 
 ### 3. Environment Configuration
 You need to establish `.env` files for the microservices requiring database or security keys. Create these `.env` files in their respective subsystem folders:
 
-**`services/auth-service/.env`**
+**`services/auth-service/.env`, `services/result-service/.env`, `services/task-service/.env`**
 ```env
-# Change secret to a long random hash in production
+# Must identically match across services for JWT token validation
 SECRET_KEY="your-super-secret-key-12345"
 DATABASE_URL="postgresql://user:pass@host/dbname"
 ```
 
-**`services/result-service/.env`**
+**`services/api-gateway/.env`**
 ```env
-# Must identically match auth-service for JWT token validation
-SECRET_KEY="your-super-secret-key-12345"
-DATABASE_URL="postgresql://user:pass@host/dbname"
+AUTH_SERVICE_URL="http://auth-service:8000"
+QUIZ_SERVICE_URL="http://quiz-service:8000"
+RESULT_SERVICE_URL="http://result-service:8000"
+TASK_SERVICE_URL="http://task-service:8000"
 ```
 
 **`frontend/.env`**
@@ -101,7 +105,7 @@ All python services employ auto-reloading (`--reload` with volume mounts) so tha
 ### 5. Seed Bilingual Recommendations (Required)
 The dashboard strictly requires existing records in the database to map Dosha suggestions. We run the native seed script from *inside* the active Docker container to push data to Postgres:
 ```bash
-docker compose exec result-service python seed_recommendations.py
+docker compose exec result-service python app/seed_recommendations.py
 ```
 > *This automatically drops old schema structures, builds composite Multi-Language indexes natively into Postgres, and populates 6 distinct entries (3 Doshas x 2 Languages).*
 
@@ -123,7 +127,8 @@ Our API Gateway intelligently isolates logic. If you are developing and hit `htt
 | Proxy Endpoint | Internal Destination Service | Purpose |
 | :--- | :--- | :--- |
 | **`/auth/*`** | Auth Service (Port 8003) | JWT creation, User Profiles |
-| **`/api/questions`** | Quiz Service (Port 8001) | Bilingual Array processing |
+| **`/quiz/*`** | Quiz Service (Port 8001) | Bilingual Array processing |
 | **`/recommendations/*`** | Result Service (Port 8002) | PostgreSQL recommendations fetch |
+| **`/tasks/*`** | Task Service (Port 8004) | Daily Task tracking |
 
 > **Note on Languages**: All GET/POST endpoints that deliver text data read for the custom `X-Language` header flag sent natively by the Frontend (`en` or `ta`).
