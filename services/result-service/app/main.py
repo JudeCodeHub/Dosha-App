@@ -1,4 +1,3 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -7,19 +6,19 @@ from app.database import engine
 from app.models import Base
 from app.routers import quiz, recommendations, tasks
 
-# Load environment variables
 load_dotenv()
 
-# Initialize Database
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="MarinZen Result Service",
-    description="Service for tracking behavior, calculating Dosha results, and providing recommendations",
+    description=(
+        "Service for tracking behavior, calculating Dosha results, "
+        "and providing recommendations"
+    ),
     version="2.0.0",
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -28,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routers
 app.include_router(quiz.router)
 app.include_router(recommendations.router)
 app.include_router(tasks.router)
@@ -37,4 +35,6 @@ app.include_router(tasks.router)
 @app.get("/")
 def read_root():
     """Health check endpoint for the Result Service."""
-    return {"message": "Result Service v2.0 is running with Task Tracking support"}
+    return {
+        "message": "Result Service v2.0 is running with Task Tracking support"
+    }

@@ -5,7 +5,7 @@ const ProgressBar = ({ percentage, accentColor }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="mb-10">
+    <div className="mb-`10">
       <div className="flex justify-between items-end mb-3">
         <div>
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">

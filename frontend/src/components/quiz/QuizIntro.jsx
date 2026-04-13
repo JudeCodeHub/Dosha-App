@@ -6,12 +6,9 @@ const QuizIntro = ({ onStart }) => {
   const { t } = useTranslation();
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center">
-      {/* Glass card */}
       <div className="relative w-full bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-3xl shadow-lg shadow-zinc-200/60 dark:shadow-stone-900/60 px-8 py-12 sm:px-14 sm:py-16 text-center overflow-hidden transition-colors duration-300">
-        {/* Subtle inner gradient glow */}
         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-linear-to-br from-amber-50/60 via-transparent to-rose-50/40 dark:from-amber-900/10 dark:to-transparent" />
 
-        {/* Lotus / mandala icon */}
         <div className="relative mb-6 flex justify-center">
           <div className="w-20 h-20 rounded-full bg-linear-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-300/50">
             <svg
@@ -43,13 +40,11 @@ const QuizIntro = ({ onStart }) => {
           </div>
         </div>
 
-        {/* Badge */}
         <div className="relative inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5 border border-amber-200 dark:border-amber-700/50">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
           {t("quiz.intro.badge", "Ayurvedic Assessment")}
         </div>
 
-        {/* Title */}
         <h1 className="relative text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-stone-100 leading-tight mb-4">
           {t("quiz.intro.title_discover", "Discover Your ")}
           <span className="bg-linear-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
@@ -57,7 +52,6 @@ const QuizIntro = ({ onStart }) => {
           </span>
         </h1>
 
-        {/* Subtitle */}
         <p className="relative text-zinc-600 dark:text-stone-400 text-lg leading-relaxed max-w-md mx-auto mb-3">
           {t(
             "quiz.intro.subtitle_p1",
@@ -75,7 +69,6 @@ const QuizIntro = ({ onStart }) => {
           )}
         </p>
 
-        {/* CTA Button */}
         <Button
           onClick={onStart}
           size="lg"
@@ -98,7 +91,6 @@ const QuizIntro = ({ onStart }) => {
           </svg>
         </Button>
 
-        {/* Dosha pills */}
         <div className="relative mt-10 flex justify-center gap-3 flex-wrap">
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400 border border-violet-200 dark:border-violet-700/50">
             🌬️ {t("doshas.vata", "Vata")}

@@ -18,17 +18,13 @@ const RecommendationSection = ({
       className={`group relative bg-white dark:bg-stone-900 rounded-2xl overflow-hidden border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-0.5 flex flex-col ${onClick ? "cursor-pointer" : ""}`}
       style={{ animationDelay: `${delayMs}ms` }}
     >
-      {/* Top gradient accent bar */}
       <div
-        className="h-[3px] w-full shrink-0"
+        className="h-0.75 w-full shrink-0"
         style={{ background: profile.gradient }}
       />
 
-      {/* Card body */}
       <div className="p-6 flex flex-col flex-1">
-        {/* ── Header ── */}
         <div className="flex items-start gap-4 mb-4">
-          {/* Icon bubble */}
           <div
             className="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center text-xl shadow-md"
             style={{ background: profile.gradient }}
@@ -37,7 +33,6 @@ const RecommendationSection = ({
             {icon}
           </div>
 
-          {/* Title block */}
           <div className="min-w-0 flex-1">
             <h3
               className="text-xl font-semibold text-stone-800 dark:text-stone-100 leading-tight truncate"
@@ -51,7 +46,6 @@ const RecommendationSection = ({
           </div>
         </div>
 
-        {/* ── Footer Actions ── */}
         <div className="mt-auto pt-2 flex items-center justify-end">
           {onClick && (
             <button
@@ -75,7 +69,6 @@ const RecommendationSection = ({
         </div>
       </div>
 
-      {/* Subtle hover glow */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
         style={{ boxShadow: `inset 0 0 0 1px ${profile.accent}30` }}

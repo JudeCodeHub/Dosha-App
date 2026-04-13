@@ -3,10 +3,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.core.auth import verify_access_token
-from app.schemas.task import TaskRead, TaskUpdate, TaskGenerateRequest
-from app.services.task_service import generate_weighted_tasks, update_task_status, reset_today_tasks
+from app.schemas.task import TaskRead, TaskUpdate
+from app.services.task_service import (
+    generate_weighted_tasks,
+    update_task_status,
+    reset_today_tasks,
+)
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
+
 
 @router.delete("/reset")
 def reset_daily_tasks(

@@ -79,8 +79,19 @@ You need to establish `.env` files for the microservices requiring database or s
 ```env
 # Must identically match across services for JWT token validation
 SECRET_KEY="your-super-secret-key-12345"
+ALGORITHM="HS256"
 DATABASE_URL="postgresql://user:pass@host/dbname"
+
+# Task service only (optional): enables AI-generated tasks.
+# If omitted or invalid, task-service falls back to static tasks.
+GEMINI_API_KEY="your-gemini-api-key"
 ```
+
+Recommended split for clarity:
+
+- `services/auth-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`
+- `services/result-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`
+- `services/task-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`, optional `GEMINI_API_KEY`
 
 **`services/api-gateway/.env`**
 ```env
@@ -100,6 +111,22 @@ Ensure Docker daemon is running, execute the following from the root directory t
 ```bash
 docker compose up --build -d
 ```
+
+Check container status:
+```bash
+docker compose ps
+```
+
+If a service fails, inspect logs:
+```bash
+docker compose logs -f task-service
+docker compose logs -f result-service
+docker compose logs -f auth-service
+docker compose logs -f api-gateway
+```
+
+> Use `docker compose up --build -d` exactly (not `docker compose build up`).
+
 All python services employ auto-reloading (`--reload` with volume mounts) so that codebase edits inherently reflect live.
 
 ### 5. Seed Bilingual Recommendations (Required)

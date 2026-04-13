@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Loader2, Leaf } from "lucide-react";
+import { ChevronLeft, Loader2, Leaf, ListChecks } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPersonalization } from "@/utils/personalizationStorage";
 import { API_BASE_URL } from "@/config/api";
@@ -26,7 +26,6 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
 
   const scores = personalization?.scores || { vata: 33, pitta: 33, kapha: 34 };
 
-  /* ── Fetch recommendation text for the left panel ───────────────── */
   useEffect(() => {
     const lang = i18n.language || "en";
     const cacheKey = `marinZenRecommendations_${dosha}_${lang}`;
@@ -69,14 +68,12 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
           setRecContent(d);
         }
       } catch {
-        /* silently fail — left panel just won't show */
       } finally {
         setRecLoading(false);
       }
     })();
   }, [dosha, i18n.language]);
 
-  /* ── Fetch daily tasks for the right panel ──────────────────────── */
   const fetchTasks = useCallback(async () => {
     setLoading(true);
     const token = localStorage.getItem("token");
@@ -113,7 +110,6 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
     fetchTasks();
   }, [fetchTasks]);
 
-  /* ── Toggle task completion ─────────────────────────────────────── */
   const handleToggleTask = async (taskId, completed) => {
     setTasks((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, completed } : t))
@@ -147,7 +143,6 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
       )
     : 0;
 
-  /* ── Parse recommendation text into bullet lines ────────────────── */
   const recText = recContent?.[category] || null;
   const recLines = recText
     ? recText
@@ -161,7 +156,6 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
       className="min-h-screen bg-stone-50 dark:bg-stone-950 pb-20"
       style={{ fontFamily: "'DM Sans',sans-serif" }}
     >
-      {/* ── Back navigation ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10">
         <Button
           variant="ghost"
@@ -174,7 +168,6 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
         </Button>
       </div>
 
-      {/* ── Page Header ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-10">
         <div className="flex items-center gap-4 sm:gap-5">
           <div
@@ -197,51 +190,49 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
         </div>
       </div>
 
-      {/* ── Two‑Panel Layout ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 items-start">
-          {/* ─── LEFT PANEL: Ayurvedic Recommendations ─── */}
-          <div className="lg:col-span-3 order-2 lg:order-1">
-            <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden">
-              {/* Panel header */}
-              <div
-                className="px-6 py-4 border-b border-stone-100 dark:border-stone-800 flex items-center gap-3"
-                style={{ background: `${profile.accent}08` }}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <section className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden min-h-136 flex flex-col">
+            <div
+              className="px-6 py-4 border-b border-stone-100 dark:border-stone-800 flex items-center gap-3"
+              style={{ background: `${profile.accent}08` }}
+            >
+              <Leaf className="w-4 h-4" style={{ color: profile.accent }} />
+              <h2
+                className="text-sm font-bold uppercase tracking-widest"
+                style={{ color: profile.accent }}
               >
-                <Leaf className="w-4 h-4" style={{ color: profile.accent }} />
-                <h2
-                  className="text-sm font-bold uppercase tracking-widest"
-                  style={{ color: profile.accent }}
-                >
-                  {t("tasks.ayurvedic_guidance", "Ayurvedic Guidance")}
-                </h2>
-              </div>
+                {t("tasks.ayurvedic_guidance", "Ayurvedic Guidance")}
+              </h2>
+            </div>
 
-              {/* Panel body */}
-              <div className="p-6 sm:p-8">
-                {recLoading ? (
-                  <div className="py-12 flex flex-col items-center text-stone-400 gap-3">
-                    <Loader2 className="w-6 h-6 animate-spin" />
-                    <p className="text-xs">{t("tasks.loading_recs", "Loading recommendations...")}</p>
-                  </div>
-                ) : recLines.length > 0 ? (
-                  <ul className="space-y-4" role="list">
-                    {recLines.map((line, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <span
-                          className="mt-[7px] w-2 h-2 rounded-full shrink-0"
-                          style={{ backgroundColor: profile.accent }}
-                          aria-hidden
-                        />
-                        <p className="text-sm sm:text-base text-stone-600 dark:text-stone-400 leading-relaxed">
-                          {line}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-stone-400 text-sm text-center py-8 italic">
-                    {t("tasks.no_recs_for", "Personalized recommendations for your")}{" "}
+            <div className="p-6 sm:p-8 flex-1">
+              {recLoading ? (
+                <div className="h-full flex flex-col items-center justify-center text-stone-400 gap-3">
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <p className="text-xs">
+                    {t("tasks.loading_recs", "Loading recommendations...")}
+                  </p>
+                </div>
+              ) : recLines.length > 0 ? (
+                <ul className="space-y-4" role="list">
+                  {recLines.map((line, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span
+                        className="mt-1.75 w-2 h-2 rounded-full shrink-0"
+                        style={{ backgroundColor: profile.accent }}
+                        aria-hidden
+                      />
+                      <p className="text-sm sm:text-base text-stone-600 dark:text-stone-400 leading-relaxed">
+                        {line}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="h-full flex items-center justify-center">
+                  <p className="text-stone-400 text-sm text-center italic">
+                    {t("tasks.no_recs_for", "Personalized recommendations for your")} {" "}
                     <span
                       className="capitalize font-semibold"
                       style={{ color: profile.accent }}
@@ -250,23 +241,35 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                     </span>{" "}
                     {t("tasks.no_recs_suffix", "constitution will appear here.")}
                   </p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-          </div>
+          </section>
 
-          {/* ─── RIGHT PANEL: Daily Tracking ─── */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
-            <div className="lg:sticky lg:top-6">
+          <section className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden min-h-136 flex flex-col">
+            <div
+              className="px-6 py-4 border-b border-stone-100 dark:border-stone-800 flex items-center gap-3"
+              style={{ background: `${profile.accent}08` }}
+            >
+              <ListChecks className="w-4 h-4" style={{ color: profile.accent }} />
+              <h2
+                className="text-sm font-bold uppercase tracking-widest"
+                style={{ color: profile.accent }}
+              >
+                {t("tasks.todays_actions", "Today's Actions")}
+              </h2>
+            </div>
+
+            <div className="p-6 sm:p-8 flex-1 flex flex-col">
               {loading ? (
-                <div className="py-16 flex flex-col items-center justify-center text-stone-400 gap-4">
-                  <Loader2 className="w-10 h-10 animate-spin" />
+                <div className="h-full flex flex-col items-center justify-center text-stone-400 gap-4">
+                  <Loader2 className="w-8 h-8 animate-spin" />
                   <p className="text-sm font-medium animate-pulse">
                     {t("tasks.aligning_plan", "Aligning your plan...")}
                   </p>
                 </div>
               ) : error ? (
-                <div className="py-16 text-center">
+                <div className="h-full flex flex-col items-center justify-center text-center">
                   <p className="text-red-500 mb-4">{error}</p>
                   <Button
                     onClick={fetchTasks}
@@ -277,25 +280,22 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
                   </Button>
                 </div>
               ) : (
-                <div className="transition-all duration-300">
+                <>
                   <ProgressBar
                     percentage={progress}
                     accentColor={profile.accent}
                   />
-                  <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-5 sm:p-6">
-                    <h2 className="text-base font-semibold text-stone-800 dark:text-stone-100 mb-5">
-                      {t("tasks.todays_actions", "Today's Daily Actions")}
-                    </h2>
+                  <div className="mt-5 flex-1">
                     <TaskList
                       tasks={tasks}
                       onTaskToggle={handleToggleTask}
                       accentColor={profile.accent}
                     />
                   </div>
-                </div>
+                </>
               )}
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </main>

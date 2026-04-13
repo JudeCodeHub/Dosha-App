@@ -195,7 +195,7 @@
     "no_recs_suffix": "constitution will appear here.",
     "aligning_plan": "Aligning your plan...",
     "retry": "Retry",
-    "todays_actions": "Today's Daily Actions",
+    "todays_actions": "Today's Actions",
     "error_prefix": "Unable to load your",
     "error_suffix": "plan. Please try again later.",
     "progress_label": "Daily Progress",

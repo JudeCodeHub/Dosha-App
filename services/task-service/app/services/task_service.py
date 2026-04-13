@@ -1,25 +1,64 @@
-import random
 from datetime import date
+import logging
 from sqlalchemy.orm import Session
+from app.constants.tasks import FALLBACK_TASKS
 from app.models.task import TaskTracking
-from app.constants.tasks import TASK_TEMPLATES
+from app.services.ai_task_generator import generate_ai_tasks
+
+logger = logging.getLogger(__name__)
+
+
+def generate_fallback_tasks(
+    category: str,
+    vata: float,
+    pitta: float,
+    kapha: float,
+) -> list[str]:
+    """Return deterministic static tasks when AI generation is unavailable."""
+    dosha_scores = {
+        "vata": float(vata),
+        "pitta": float(pitta),
+        "kapha": float(kapha),
+    }
+    dominant = max(dosha_scores, key=dosha_scores.get)
+
+    category_tasks = FALLBACK_TASKS.get(category, {})
+    tasks = category_tasks.get(dominant, [])
+
+    if tasks:
+        return tasks[:5]
+
+    # Last-resort defaults if category is unexpected.
+    return [
+        "Drink warm water and start mindfully",
+        "Take a 20-minute mindful walk",
+        "Eat fresh, balanced meals today",
+        "Pause for 5 minutes deep breathing",
+        "Sleep at a regular time tonight",
+    ]
 
 
 def generate_weighted_tasks(
-    db: Session, user_id: str, category: str, vata: float, pitta: float, kapha: float
+    db: Session,
+    user_id: str,
+    category: str,
+    vata: float,
+    pitta: float,
+    kapha: float,
 ):
     """
-    Generates personalized tasks based on weighted dosha percentages.
-    Includes fallback logic to ensure tasks are always returned.
+    Generates 5 personalized daily tasks via Gemini AI
+    based on dosha percentages.
+    Returns cached tasks if already generated today.
     """
     today = date.today()
-    
+
     try:
-        # 1. Check for existing tasks
+        # 1. Return cached tasks if they already exist for today
         existing = (
             db.query(TaskTracking)
             .filter(
-                TaskTracking.id > 0, # Optimization hint
+                TaskTracking.id > 0,
                 TaskTracking.user_id == str(user_id),
                 TaskTracking.category == str(category),
                 TaskTracking.date == today,
@@ -30,64 +69,51 @@ def generate_weighted_tasks(
         if existing:
             return existing
 
-        # 2. Preparation
-        task_pool_dict = TASK_TEMPLATES.get(category, {})
-        if not task_pool_dict:
-            return [] # Should not happen with valid categories
+        # 2. Generate tasks via Gemini AI
+        ai_task_texts = generate_ai_tasks(
+            category,
+            float(vata),
+            float(pitta),
+            float(kapha),
+        )
 
-        scores = {"vata": float(vata), "pitta": float(pitta), "kapha": float(kapha)}
-        total_score = sum(scores.values())
-        if total_score <= 0:
-            scores = {"vata": 33.3, "pitta": 33.3, "kapha": 33.4}
-            
-        dosha_keys = list(scores.keys())
-        dosha_weights = [scores[k] for k in dosha_keys]
+        # 3. Fallback to static tasks if AI generation fails
+        task_texts = ai_task_texts or generate_fallback_tasks(
+            category,
+            vata,
+            pitta,
+            kapha,
+        )
 
-        selections = []
-        generated_names = set()
-        
-        # Guard against infinite loops with a retry limit
-        max_attempts = 50
-        attempts = 0
-        
-        while len(selections) < 5 and attempts < max_attempts:
-            attempts += 1
-            # Pick dosha bucket
-            chosen_dosha = random.choices(dosha_keys, weights=dosha_weights, k=1)[0]
-            pool = task_pool_dict.get(chosen_dosha, [])
-            
-            if not pool:
-                continue
-                
-            task_text = random.choice(pool)
-            if task_text not in generated_names:
-                generated_names.add(task_text)
-                task_obj = TaskTracking(
-                    user_id=str(user_id),
-                    category=str(category),
-                    task_name=task_text,
-                    date=today,
-                    completed=False
-                )
-                selections.append(task_obj)
+        selections = [
+            TaskTracking(
+                user_id=str(user_id),
+                category=str(category),
+                task_name=task_text,
+                date=today,
+                completed=False,
+            )
+            for task_text in task_texts
+        ]
 
-        # 3. Save and return
-        if selections:
-            db.add_all(selections)
-            db.commit()
-            for task in selections:
-                db.refresh(task)
-            return selections
-        
-        return []
+        db.add_all(selections)
+        db.commit()
+        for task in selections:
+            db.refresh(task)
+        return selections
 
     except Exception as e:
-        print(f"Error generating tasks: {e}")
+        logger.error("Error generating tasks: %s", e)
         db.rollback()
         return []
 
 
-def update_task_status(db: Session, user_id: str, task_id: int, completed: bool):
+def update_task_status(
+    db: Session,
+    user_id: str,
+    task_id: int,
+    completed: bool,
+):
     """Updates the completion status of a specific task."""
     task = (
         db.query(TaskTracking)
@@ -100,8 +126,12 @@ def update_task_status(db: Session, user_id: str, task_id: int, completed: bool)
         db.refresh(task)
     return task
 
+
 def reset_today_tasks(db: Session, user_id: str):
-    """Deletes all tasks generated today for a user, forcing a fresh generation."""
+    """Deletes all tasks generated today for a user.
+
+    This forces fresh generation on the next fetch.
+    """
     try:
         deleted = db.query(TaskTracking).filter(
             TaskTracking.user_id == str(user_id),
@@ -111,5 +141,5 @@ def reset_today_tasks(db: Session, user_id: str):
         return deleted
     except Exception as e:
         db.rollback()
-        print(f"Error resetting tasks: {e}")
+        logger.error("Error resetting tasks: %s", e)
         return 0

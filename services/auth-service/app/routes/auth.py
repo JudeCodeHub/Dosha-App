@@ -2,9 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.schemas.auth import UpdateDoshaRequest
-from fastapi import Header
 from app.core.database import get_db
-from app.core.security import hash_password, verify_password, create_access_token, verify_access_token
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    verify_access_token,
+)
 from app.models.user import User
 from app.models.history import UserHistory
 from app.schemas.auth import (
@@ -52,21 +56,31 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
 
     if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password",
+        )
 
     if not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password",
+        )
 
     access_token = create_access_token(
         data={"sub": str(user.id), "email": user.email}
     )
 
     scores = None
-    if user.vata_score is not None and user.pitta_score is not None and user.kapha_score is not None:
+    if (
+        user.vata_score is not None
+        and user.pitta_score is not None
+        and user.kapha_score is not None
+    ):
         scores = {
             "vata": user.vata_score,
             "pitta": user.pitta_score,
-            "kapha": user.kapha_score
+            "kapha": user.kapha_score,
         }
 
     return LoginResponse(
@@ -80,12 +94,11 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     )
 
 
-
 @router.patch("/dosha")
 def update_dosha(
     payload: UpdateDoshaRequest,
     db: Session = Depends(get_db),
-    user_id: str = Depends(verify_access_token)
+    user_id: str = Depends(verify_access_token),
 ):
     user = db.query(User).filter(User.id == int(user_id)).first()
 
@@ -101,7 +114,6 @@ def update_dosha(
     db.commit()
     db.refresh(user)
 
-    # Record history — fail silently so a DB error never breaks the dosha update
     try:
         history = UserHistory(
             user_id=str(user.id),

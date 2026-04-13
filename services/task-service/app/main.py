@@ -1,4 +1,3 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -7,19 +6,19 @@ from app.database import engine
 from app.models import Base
 from app.routers import tasks
 
-# Load environment variables
 load_dotenv()
 
-# Initialize Database — creates the task_tracking table if it doesn't exist
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="MarinZen Task Service",
-    description="Dedicated microservice for daily personalized task generation and tracking",
+    description=(
+        "Dedicated microservice for daily personalized "
+        "task generation and tracking"
+    ),
     version="1.0.0",
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -28,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register Routers
 app.include_router(tasks.router)
 
 
