@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import IntroPage from "@/pages/IntroPage";
 import AuthPage from "@/pages/AuthPage";
 import DiscoverPage from "@/pages/DiscoverPage";
+import DoshaSelectPage from "@/pages/DoshaSelectPage";
 import DashboardPage from "@/pages/DashboardPage";
 import DietPage from "@/pages/DietPage";
 import YogaPage from "@/pages/YogaPage";
@@ -170,9 +171,33 @@ const QuizModule = () => {
   };
 
   const getDominantDosha = (scores) => {
-    return Object.keys(scores).reduce((a, b) =>
-      scores[a] >= scores[b] ? a : b,
-    );
+    const total = Object.values(scores).reduce((a, b) => a + b, 0);
+    if (total === 0) return null;
+    
+    const percentages = {
+      vata: (scores.vata / total) * 100,
+      pitta: (scores.pitta / total) * 100,
+      kapha: (scores.kapha / total) * 100,
+    };
+    
+    const sorted = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
+    const [top1_dosha, top1_score] = sorted[0];
+    const [top2_dosha, top2_score] = sorted[1];
+    
+    if (top1_score >= 70) {
+      return top1_dosha;
+    }
+    
+    if (top1_score - top2_score <= 10) {
+      const order = { vata: 1, pitta: 2, kapha: 3 };
+      if (order[top1_dosha] < order[top2_dosha]) {
+        return `${top1_dosha}+${top2_dosha}`;
+      } else {
+        return `${top2_dosha}+${top1_dosha}`;
+      }
+    }
+    
+    return top1_dosha;
   };
 
   const handleRestart = () => {
@@ -264,6 +289,7 @@ const App = () => {
           <Route path="/" element={<IntroPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/discover" element={<DiscoverPage />} />
+          <Route path="/dosha-select" element={<DoshaSelectPage />} />
           <Route path="/quiz" element={<QuizModule />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/category/diet" element={<DietPage />} />

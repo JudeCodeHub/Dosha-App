@@ -90,6 +90,7 @@ const TaskTrackingLayout = ({ category, title, description, icon }) => {
         vata: scores.vata || 0,
         pitta: scores.pitta || 0,
         kapha: scores.kapha || 0,
+        dosha: dosha,
       }).toString();
 
       const response = await fetch(

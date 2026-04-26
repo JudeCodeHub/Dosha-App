@@ -45,6 +45,7 @@ def generate_weighted_tasks(
     vata: float,
     pitta: float,
     kapha: float,
+    dosha: str = None,
 ):
     """
     Generates 5 personalized daily tasks via Gemini AI
@@ -69,21 +70,37 @@ def generate_weighted_tasks(
         if existing:
             return existing
 
-        # 2. Generate tasks via Gemini AI
-        ai_task_texts = generate_ai_tasks(
-            category,
-            float(vata),
-            float(pitta),
-            float(kapha),
-        )
+        # 1.5 Check for seeded tasks matching the dosha profile
+        seed_tasks = []
+        if dosha:
+            seed_tasks = (
+                db.query(TaskTracking)
+                .filter(
+                    TaskTracking.user_id == 'seed',
+                    TaskTracking.category == str(category),
+                    TaskTracking.dosha == str(dosha).lower()
+                )
+                .all()
+            )
 
-        # 3. Fallback to static tasks if AI generation fails
-        task_texts = ai_task_texts or generate_fallback_tasks(
-            category,
-            vata,
-            pitta,
-            kapha,
-        )
+        if seed_tasks:
+            task_texts = [st.task_name for st in seed_tasks]
+        else:
+            # 2. Generate tasks via Gemini AI
+            ai_task_texts = generate_ai_tasks(
+                category,
+                float(vata),
+                float(pitta),
+                float(kapha),
+            )
+
+            # 3. Fallback to static tasks if AI generation fails
+            task_texts = ai_task_texts or generate_fallback_tasks(
+                category,
+                vata,
+                pitta,
+                kapha,
+            )
 
         selections = [
             TaskTracking(
@@ -92,6 +109,7 @@ def generate_weighted_tasks(
                 task_name=task_text,
                 date=today,
                 completed=False,
+                dosha=dosha,
             )
             for task_text in task_texts
         ]

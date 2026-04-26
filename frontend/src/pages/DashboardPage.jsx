@@ -125,7 +125,7 @@ export const DashboardPage = () => {
         return;
       }
       try {
-        const res = await fetch(`${API_BASE_URL}/recommendations/${dosha}`, {
+        const res = await fetch(`${API_BASE_URL}/recommendations/${encodeURIComponent(dosha)}`, {
           headers: { Authorization: `Bearer ${token}`, "X-Language": lang },
         });
         if (res.status === 401) {

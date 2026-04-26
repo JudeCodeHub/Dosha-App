@@ -40,6 +40,45 @@ export const DASHBOARD_PROFILES = {
       "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.",
     mantra: "Tejasvi Navadhitamastu",
   },
+  "vata+pitta": {
+    gradient: "linear-gradient(135deg,#7C3AED,#EA580C)",
+    heroBg: "linear-gradient(160deg,#F5F3FF,#FFF7ED 40%,#FEF2F2)",
+    heroBgDark: "linear-gradient(160deg,#1e1b4b,#431407 60%,#450a0a)",
+    accent: "#9333EA",
+    accentLight: "#E9D5FF",
+    icon: "🌪️",
+    element: "Air, Space & Fire",
+    tagline: "Dynamic · Passionate · Versatile",
+    description:
+      "As a Vata-Pitta type, you blend the quick, creative energy of air with the focused intensity of fire. Balance comes from grounding practices and cooling nourishment to calm the active mind.",
+    mantra: "Om Shanti",
+  },
+  "pitta+kapha": {
+    gradient: "linear-gradient(135deg,#EA580C,#0D9488)",
+    heroBg: "linear-gradient(160deg,#FFF7ED,#ECFDF5 40%,#F0FDF4)",
+    heroBgDark: "linear-gradient(160deg,#431407,#042f2e 60%,#064e3b)",
+    accent: "#B45309",
+    accentLight: "#FDE68A",
+    icon: "🌋",
+    element: "Fire, Water & Earth",
+    tagline: "Driven · Nurturing · Powerful",
+    description:
+      "As a Pitta-Kapha type, you combine the sharp, driven nature of fire with the stable, caring qualities of earth. Your balance involves moderate, regular movement and a varied diet to keep energy flowing.",
+    mantra: "Lokah Samastah Sukhino Bhavantu",
+  },
+  "vata+kapha": {
+    gradient: "linear-gradient(135deg,#7C3AED,#0D9488)",
+    heroBg: "linear-gradient(160deg,#F5F3FF,#ECFDF5 40%,#F0FDF4)",
+    heroBgDark: "linear-gradient(160deg,#1e1b4b,#042f2e 60%,#064e3b)",
+    accent: "#4F46E5",
+    accentLight: "#C7D2FE",
+    icon: "🌊",
+    element: "Air, Space, Earth & Water",
+    tagline: "Adaptable · Steady · Harmonious",
+    description:
+      "As a Vata-Kapha type, you have both the light, creative spirit of air and the grounded strength of earth. Staying active and warm will keep your diverse energies in perfect harmony.",
+    mantra: "Om Namah Shivaya",
+  },
 };
 
 export const DASHBOARD_SECTIONS = [
@@ -132,6 +171,9 @@ export const DOSHA_DESCRIPTIONS = {
     "Pitta is associated with heat, sharpness, intensity, and transformation.",
   kapha:
     "Kapha is associated with stability, strength, calmness, and endurance.",
+  "vata+pitta": "Vata-Pitta blends creative movement with sharp intensity and transformation.",
+  "pitta+kapha": "Pitta-Kapha combines fiery focus with enduring stability and nurturing calm.",
+  "vata+kapha": "Vata-Kapha integrates light adaptability with grounded strength and endurance.",
 };
 
 export const QUIZ_RESULT_CONFIG = {
@@ -167,5 +209,38 @@ export const QUIZ_RESULT_CONFIG = {
     emoji: "🌿",
     element: "Earth & Water",
     qualities: ["Calm", "Stable", "Nurturing", "Enduring"],
+  },
+  "vata+pitta": {
+    gradient: "from-violet-500 to-orange-500",
+    softBg: "bg-fuchsia-50 dark:bg-fuchsia-900/20",
+    border: "border-fuchsia-200 dark:border-fuchsia-700/50",
+    text: "text-fuchsia-700 dark:text-fuchsia-400",
+    badge:
+      "bg-fuchsia-100 dark:bg-fuchsia-900/30 text-fuchsia-700 dark:text-fuchsia-400 border-fuchsia-200 dark:border-fuchsia-700/50",
+    emoji: "🌪️",
+    element: "Air, Space & Fire",
+    qualities: ["Dynamic", "Passionate", "Versatile"],
+  },
+  "pitta+kapha": {
+    gradient: "from-orange-500 to-teal-500",
+    softBg: "bg-amber-50 dark:bg-amber-900/20",
+    border: "border-amber-200 dark:border-amber-700/50",
+    text: "text-amber-700 dark:text-amber-400",
+    badge:
+      "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-700/50",
+    emoji: "🌋",
+    element: "Fire, Water & Earth",
+    qualities: ["Driven", "Nurturing", "Powerful"],
+  },
+  "vata+kapha": {
+    gradient: "from-violet-500 to-teal-500",
+    softBg: "bg-indigo-50 dark:bg-indigo-900/20",
+    border: "border-indigo-200 dark:border-indigo-700/50",
+    text: "text-indigo-700 dark:text-indigo-400",
+    badge:
+      "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-700/50",
+    emoji: "🌊",
+    element: "Air, Space, Earth & Water",
+    qualities: ["Adaptable", "Steady", "Harmonious"],
   },
 };

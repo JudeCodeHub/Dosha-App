@@ -29,6 +29,7 @@ def get_daily_tasks(
     vata: float = Query(...),
     pitta: float = Query(...),
     kapha: float = Query(...),
+    dosha: str = Query(None),
     db: Session = Depends(get_db),
     user_id: str = Depends(verify_access_token),
 ):
@@ -39,7 +40,7 @@ def get_daily_tasks(
     if category not in ["diet", "yoga", "routine"]:
         raise HTTPException(status_code=400, detail="Invalid category")
 
-    return generate_weighted_tasks(db, user_id, category, vata, pitta, kapha)
+    return generate_weighted_tasks(db, user_id, category, vata, pitta, kapha, dosha)
 
 
 @router.patch("/{task_id}", response_model=TaskRead)

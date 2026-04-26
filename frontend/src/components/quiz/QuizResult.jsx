@@ -10,6 +10,12 @@ const doshaDescriptions = {
     "Pitta is associated with heat, sharpness, intensity, and transformation.",
   kapha:
     "Kapha is associated with stability, strength, calmness, and endurance.",
+  "vata+pitta":
+    "Vata-Pitta blends the quick, creative energy of air with the focused intensity of fire.",
+  "pitta+kapha":
+    "Pitta-Kapha combines the sharp focus of fire with the steady, calm endurance of earth.",
+  "vata+kapha":
+    "Vata-Kapha is a unique combination of creative movement and grounded stability.",
 };
 
 const doshaConfig = {
@@ -45,6 +51,39 @@ const doshaConfig = {
     emoji: "🌿",
     element: "Earth & Water",
     qualities: ["Calm", "Stable", "Nurturing", "Enduring"],
+  },
+  "vata+pitta": {
+    gradient: "from-violet-500 to-orange-500",
+    softBg: "bg-violet-50 dark:bg-violet-900/20",
+    border: "border-violet-200 dark:border-violet-700/50",
+    text: "text-violet-700 dark:text-violet-400",
+    badge:
+      "bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-700/50",
+    emoji: "🌪️",
+    element: "Air, Space & Fire",
+    qualities: ["Dynamic", "Passionate", "Versatile", "Expressive"],
+  },
+  "pitta+kapha": {
+    gradient: "from-orange-500 to-teal-500",
+    softBg: "bg-orange-50 dark:bg-orange-900/20",
+    border: "border-orange-200 dark:border-orange-700/50",
+    text: "text-orange-700 dark:text-orange-400",
+    badge:
+      "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-700/50",
+    emoji: "🌋",
+    element: "Fire, Water & Earth",
+    qualities: ["Strong", "Determined", "Stable", "Productive"],
+  },
+  "vata+kapha": {
+    gradient: "from-violet-500 to-teal-500",
+    softBg: "bg-teal-50 dark:bg-teal-900/20",
+    border: "border-teal-200 dark:border-teal-700/50",
+    text: "text-teal-700 dark:text-teal-400",
+    badge:
+      "bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 border-teal-200 dark:border-teal-700/50",
+    emoji: "☁️",
+    element: "Air, Space & Earth",
+    qualities: ["Adaptable", "Nurturing", "Gentle", "Enduring"],
   },
 };
 

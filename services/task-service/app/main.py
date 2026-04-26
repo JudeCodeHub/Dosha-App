@@ -8,7 +8,33 @@ from app.routers import tasks
 
 load_dotenv()
 
+from sqlalchemy import text
+
 Base.metadata.create_all(bind=engine)
+
+def seed_tasks():
+    try:
+        with engine.connect() as conn:
+            try:
+                conn.execute(text("ALTER TABLE task_tracking ADD COLUMN dosha VARCHAR;"))
+                conn.commit()
+                print("Added dosha column.")
+            except Exception:
+                conn.rollback()
+
+            import os
+            filepath = 'seed_tasks.sql'
+            if not os.path.exists(filepath):
+                filepath = '../seed_tasks.sql'
+            with open(filepath, 'r', encoding='utf-8') as f:
+                sql = f.read()
+                conn.execute(text(sql))
+                conn.commit()
+            print("Tasks seeded automatically on startup.")
+    except Exception as e:
+        print("Failed to auto-seed tasks:", e)
+
+seed_tasks()
 
 app = FastAPI(
     title="MarinZen Task Service",

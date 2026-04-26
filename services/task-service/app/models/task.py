@@ -11,3 +11,4 @@ class TaskTracking(Base):
     task_name = Column(String, nullable=False)
     completed = Column(Boolean, default=False)
     date = Column(Date, server_default=func.current_date(), nullable=False)
+    dosha = Column(String, nullable=True)
