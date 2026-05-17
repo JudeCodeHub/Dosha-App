@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
 import { QUIZ_QUESTION_CONFIG } from "@/constants/doshaData";
 
 const QuizQuestion = ({
@@ -16,7 +15,7 @@ const QuizQuestion = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!question)
+  if (!question) {
     return (
       <div className="w-full max-w-2xl mx-auto px-2">
         <div className="bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-3xl shadow-lg p-6 sm:p-8 text-center text-zinc-600 dark:text-stone-400">
@@ -24,6 +23,7 @@ const QuizQuestion = ({
         </div>
       </div>
     );
+  }
 
   const progressValue = ((currentQuestionIndex + 1) / totalQuestions) * 100;
   const isFirst = currentQuestionIndex === 0;
@@ -32,7 +32,6 @@ const QuizQuestion = ({
   return (
     <div className="w-full max-w-2xl mx-auto px-2 sm:px-0">
       <div className="bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden transition-colors duration-300">
-        {/* Progress header */}
         <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-5">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold tracking-widest uppercase text-zinc-500 dark:text-stone-500">
@@ -49,7 +48,6 @@ const QuizQuestion = ({
           <Progress value={progressValue} className="h-2" />
         </div>
 
-        {/* Question text */}
         <div className="px-5 sm:px-8 pb-5 sm:pb-6">
           <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full border border-amber-200 dark:border-amber-700/50 mb-3 sm:mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
@@ -64,7 +62,6 @@ const QuizQuestion = ({
           </h2>
         </div>
 
-        {/* Answer options */}
         <div className="px-5 sm:px-8 pb-5 sm:pb-6 space-y-2 sm:space-y-3">
           {question.options.map((option, index) => {
             const doshaKey = option.dosha ? option.dosha.toLowerCase() : "";
@@ -127,7 +124,6 @@ const QuizQuestion = ({
           })}
         </div>
 
-        {/* Navigation */}
         <div className="px-5 sm:px-8 pb-6 sm:pb-8 mt-2 flex w-full items-center justify-between gap-3">
           <Button
             variant="outline"

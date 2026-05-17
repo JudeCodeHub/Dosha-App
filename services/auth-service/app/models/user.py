@@ -19,6 +19,7 @@ class User(Base):
     vata_score = Column(Integer, nullable=True)
     pitta_score = Column(Integer, nullable=True)
     kapha_score = Column(Integer, nullable=True)
+    avatar = Column(String, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

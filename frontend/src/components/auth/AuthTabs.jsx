@@ -9,7 +9,6 @@ export const AuthTabs = () => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Tab Selectors */}
       <div className="flex bg-black/5 dark:bg-stone-900/50 p-1 rounded-xl mb-6">
         <button
           onClick={() => setActiveTab("login")}
@@ -33,7 +32,6 @@ export const AuthTabs = () => {
         </button>
       </div>
 
-      {/* Render Active Form */}
       <div className="bg-white/60 dark:bg-stone-800/40 backdrop-blur-md border border-stone-200/50 dark:border-stone-700/50 rounded-2xl p-6 sm:p-8 shadow-xl">
         {activeTab === "login" ? <LoginForm /> : <SignupForm />}
       </div>

@@ -13,41 +13,9 @@ export const DiscoverPage = () => {
   const { t } = useTranslation();
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-      return;
-    }
     navigate("/auth");
   };
 
-  const handleDoshaSelect = async (dosha) => {
-    const userId = localStorage.getItem("userId");
-    const selectedDosha = dosha.toLowerCase();
-
-    try {
-      if (userId) {
-        const token = localStorage.getItem("token");
-        await fetch(`${API_BASE_URL}/auth/dosha`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ dosha: selectedDosha }),
-        });
-      }
-    } catch (error) {
-      console.error("Failed to sync Dosha to server:", error);
-    }
-
-    localStorage.setItem("marinZenUserDosha", selectedDosha);
-    savePersonalization({
-      mode: "manual",
-      dominantDosha: dosha,
-      scores: { vata: null, pitta: null, kapha: null },
-    });
-    navigate("/dashboard");
-  };
 
   return (
     <main className="min-h-screen px-4 py-16 sm:py-24 flex flex-col items-center justify-center relative overflow-y-auto overflow-x-hidden w-full">
@@ -92,10 +60,10 @@ export const DiscoverPage = () => {
                 localStorage.removeItem("prakritiQuizState");
                 navigate("/quiz");
               }}
-              className="w-full h-12 sm:h-14 bg-linear-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white rounded-xl text-base sm:text-lg font-semibold shadow-lg shadow-teal-900/30 transition-all duration-300 hover:scale-[1.02] border-0 mt-4 group"
+              className="w-full h-auto min-h-[48px] sm:min-h-[56px] py-3 px-4 bg-linear-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white rounded-xl text-sm sm:text-base md:text-lg font-semibold shadow-lg shadow-teal-900/30 transition-all duration-300 hover:scale-[1.02] border-0 mt-4 group flex items-center justify-center leading-snug"
             >
-              {t("discover.start_quiz", "Start Quiz")}
-              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="text-center">{t("discover.start_quiz", "Start Quiz")}</span>
+              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
             </Button>
           </DiscoveryOptionCard>
 
@@ -103,14 +71,14 @@ export const DiscoverPage = () => {
             title={t("discover.opt2_title", "I Already Know My Dosha")}
             description={t(
               "discover.opt2_desc",
-              "Select your dosha directly and continue to your personalized dashboard.",
+              "Select your dosha directly to continue.",
             )}
           >
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4 w-full">
               <Button
                 onClick={() => navigate("/dosha-select")}
                 variant="outline"
-                className="w-full h-12 sm:h-14 border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl text-base sm:text-lg font-semibold transition-all duration-300"
+                className="w-full h-auto min-h-[48px] sm:min-h-[56px] py-3 px-4 border-orange-500/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 flex items-center justify-center text-center leading-snug whitespace-normal"
               >
                 {t("discover.select_dosha", "Select Dosha Manually")}
               </Button>

@@ -10,9 +10,7 @@ class Recommendation(Base):
     language = Column(String(5), default="en", nullable=False, index=True)
     diet = Column(Text, nullable=True)
     yoga = Column(Text, nullable=True)
-    skincare = Column(Text, nullable=True)
-    haircare = Column(Text, nullable=True)
-    herbs = Column(Text, nullable=True)
+    ayurvedic_guidance = Column(Text, nullable=True)
     routine = Column(Text, nullable=True)
 
     __table_args__ = (

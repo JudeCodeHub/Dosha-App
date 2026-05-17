@@ -42,9 +42,7 @@ def get_recommendations(
     data = {
         "diet": row.diet,
         "yoga": row.yoga,
-        "skincare": row.skincare,
-        "haircare": row.haircare,
-        "herbs": row.herbs,
+        "ayurvedic_guidance": row.ayurvedic_guidance,
         "routine": row.routine,
     }
 

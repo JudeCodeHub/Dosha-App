@@ -78,7 +78,7 @@ export const DoshaSelectPage = () => {
           <p className="text-stone-600 dark:text-stone-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
             {t(
               "discover.select_subtitle",
-              "Choose your dominant dosha or dual-dosha to personalize your dashboard.",
+              "Choose your dominant dosha or dual-dosha to begin.",
             )}
           </p>
         </div>
@@ -88,7 +88,7 @@ export const DoshaSelectPage = () => {
             <DoshaCard
               key={opt.dosha}
               dosha={opt.dosha}
-              label={opt.label}
+              label={t(`discover.dosha_${opt.dosha.replace("+", "_")}`, opt.label)}
               icon={opt.icon}
               colorClass={opt.colorClass}
               onClick={handleDoshaSelect}

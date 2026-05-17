@@ -1,18 +1,19 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import TaskTrackingLayout from "@/components/tasks/TaskTrackingLayout";
+import RecommendationLayout from "@/components/recommendations/RecommendationLayout";
+import { Utensils } from "lucide-react";
 
-export const DietPage = () => {
-  const { t } = useTranslation();
+const DietPage = () => {
   return (
-    <TaskTrackingLayout
-      category="diet"
-      title={t("category.diet.title", "Dietary Path")}
-      description={t(
-        "category.diet.description",
-        "Nourishing your body according to your unique constitution. These daily recommendations help maintain your digestive fire (Agni) and sustain your vitality."
-      )}
-      icon="🌾"
+    <RecommendationLayout
+      category="Diet"
+      title="Dietary Nourishment"
+      subtitle="Nutritional Harmony"
+      icon={Utensils}
+      colorClass="green"
+      gradientFrom="from-green-600"
+      gradientTo="to-emerald-500"
+      bgBlurColor="bg-green-200/20"
+      proTip="Eating with gratitude and sitting down increases your Ojas (vitality)."
     />
   );
 };

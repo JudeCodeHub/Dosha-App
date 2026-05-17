@@ -1,463 +1,91 @@
-import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import RecommendationSection from "@/components/dashboard/RecommendationSection";
-import { getPersonalization } from "@/utils/personalizationStorage";
-import { LogOut, RefreshCcw, Leaf, ChevronDown } from "lucide-react";
-import { API_BASE_URL } from "@/config/api";
+import React, { useEffect, useState } from "react";
+import DashboardTopBar from "@/components/dashboard/DashboardTopBar";
+import FeatureCard from "@/components/dashboard/FeatureCard";
+import DailyTaskRitual from "@/components/dashboard/DailyTaskRitual";
+import DoshaPieChart from "@/components/dashboard/DoshaPieChart";
+import { Utensils, Zap, Clock, BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { DASHBOARD_PROFILES, DASHBOARD_SECTIONS } from "@/constants/doshaData";
 
-const getGreetingKey = () => {
-  const h = new Date().getHours();
-  return h < 12
-    ? "dashboard.greeting_morning"
-    : h < 17
-      ? "dashboard.greeting_afternoon"
-      : "dashboard.greeting_evening";
-};
-
-const FONT_URL =
-  "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap";
-
-export const DashboardPage = () => {
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
-  const personalization = getPersonalization() || {};
-
-  const dosha = localStorage.getItem("marinZenUserDosha")?.toLowerCase();
-  const displayName = localStorage.getItem("userName") || "Wellness Seeker";
-
-  const [content, setContent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+const DashboardPage = () => {
+  const { t } = useTranslation();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!document.getElementById("mz-fonts")) {
-      const l = Object.assign(document.createElement("link"), {
-        id: "mz-fonts",
-        rel: "stylesheet",
-        href: FONT_URL,
-      });
-      document.head.appendChild(l);
-    }
+    const storedName = localStorage.getItem("userName");
+    const storedDosha = localStorage.getItem("marinZenUserDosha");
+    const userId = localStorage.getItem("userId");
+
+    setUser({
+      id: userId,
+      name: storedName || "Explorer",
+      dosha: storedDosha || "Vata",
+    });
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    const detect = () =>
-      setIsDark(document.documentElement.classList.contains("dark"));
-    detect();
-    window.addEventListener("scroll", onScroll);
-    const obs = new MutationObserver(detect);
-    obs.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      obs.disconnect();
-    };
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    [
-      "token",
-      "userId",
-      "userName",
-      "userEmail",
-      "marinzen_auth",
-      "marinzen_personalization",
-      "selectedDosha",
-      "marinZenUserDosha",
-      "dosha",
-    ].forEach((k) => localStorage.removeItem(k));
-    ["vata", "pitta", "kapha"].forEach((d) => {
-      localStorage.removeItem(`marinZenRecommendations_${d}`);
-      localStorage.removeItem(`marinZenRecommendations_${d}_en`);
-      localStorage.removeItem(`marinZenRecommendations_${d}_ta`);
-    });
-    navigate("/auth");
-  }, [navigate]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      handleLogout();
-      return;
-    }
-    if (!dosha || dosha === "null") {
-      navigate("/discover");
-      return;
-    }
-
-    const lang = i18n.language || "en";
-    const cacheKey = `marinZenRecommendations_${dosha}_${lang}`;
-    const TTL = 60 * 60 * 1000;
-
-    const readCache = () => {
-      try {
-        const raw = localStorage.getItem(cacheKey);
-        if (!raw) return null;
-        const { data, timestamp } = JSON.parse(raw);
-        if (Date.now() - timestamp < TTL) return data;
-        localStorage.removeItem(cacheKey);
-      } catch {
-        localStorage.removeItem(cacheKey);
-      }
-      return null;
-    };
-
-    const writeCache = (data) => {
-      try {
-        localStorage.setItem(
-          cacheKey,
-          JSON.stringify({ data, timestamp: Date.now() }),
-        );
-      } catch {}
-    };
-
-    (async () => {
-      const cached = readCache();
-      if (cached) {
-        setContent(cached);
-        setLoading(false);
-        return;
-      }
-      try {
-        const res = await fetch(`${API_BASE_URL}/recommendations/${encodeURIComponent(dosha)}`, {
-          headers: { Authorization: `Bearer ${token}`, "X-Language": lang },
-        });
-        if (res.status === 401) {
-          handleLogout();
-          return;
-        }
-        if (res.ok) {
-          const d = await res.json();
-          writeCache(d);
-          setContent(d);
-        }
-      } catch {
-        /* network error */
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [dosha, navigate, handleLogout, i18n.language]);
-
-  const profile = dosha ? DASHBOARD_PROFILES[dosha] : null;
-  const scores = personalization?.scores || null;
-  const total = scores
-    ? Object.values(scores).reduce((a, b) => (a || 0) + (b || 0), 0)
-    : 0;
-
-  if (!dosha || !profile) return null;
-
-
-
-  const retake = () => {
-    if (dosha)
-      localStorage.removeItem(
-        `marinZenRecommendations_${dosha}_${i18n.language || "en"}`,
-      );
-    navigate("/discover");
-  };
+  if (!user) return null;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ fontFamily: "'DM Sans',sans-serif" }}
-    >
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl border-b border-stone-200/60 dark:border-stone-800/60 shadow-sm" : "bg-transparent"}`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 grid grid-cols-3 items-center">
-          <div className="flex items-center gap-2">
-            <Leaf className="w-4 h-4" style={{ color: profile.accent }} />
-            <span
-              className="font-semibold tracking-tight text-stone-800 dark:text-stone-200"
-              style={{
-                fontFamily: "'Cormorant Garamond',serif",
-                fontSize: "1.15rem",
-              }}
-            >
-              MarinZen
-            </span>
-          </div>
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 transition-colors duration-300 flex flex-col">
+      <DashboardTopBar user={user} />
 
-          <div className="flex justify-center">
-            <div
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full border"
-              style={{
-                borderColor: profile.accentLight,
-                background: `${profile.accent}0d`,
-              }}
-            >
-              <span className="text-base sm:text-lg">{profile.icon}</span>
-              <span
-                className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest"
-                style={{ color: profile.accent }}
-              >
-                {dosha}
-              </span>
-            </div>
-          </div>
+      <main className="flex-grow w-full flex flex-col justify-center items-center px-8 sm:px-16 lg:px-24 py-16">
+        <div className="w-full max-w-[1800px] mx-auto">
+          <DoshaPieChart />
 
-          <div className="flex items-center gap-1.5 sm:gap-3 justify-end">
-            <button
-              onClick={retake}
-              title="Retake Assessment"
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border text-[10px] sm:text-xs font-semibold uppercase tracking-wider border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all"
-            >
-              <RefreshCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span className="hidden sm:inline">
-                {t("dashboard.retake_quiz", "Retake Quiz")}
-              </span>
-            </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full border text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-all"
-            >
-              <LogOut className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              <span className="hidden sm:inline">
-                {t("dashboard.sign_out", "Sign Out")}
-              </span>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <div
-        className="relative overflow-hidden"
-        style={{ background: isDark ? profile.heroBgDark : profile.heroBg }}
-      >
-        {/* Mandala rings */}
-        <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          aria-hidden
-        >
-          {[320, 460, 600, 740, 900].map((sz, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full border"
-              style={{
-                width: sz,
-                height: sz,
-                borderColor: profile.accent,
-                borderWidth: 1,
-                opacity: 0.04 + i * 0.015,
-              }}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-24 w-full mb-24">
+            <FeatureCard
+              icon={Utensils}
+              title={t("dashboard.features.diet.title", "Diet")}
+              quote={t("dashboard.features.diet.quote", "Nourish your inner fire")}
+              points={[
+                t("dashboard.features.diet.p1", "Warm Rice"),
+                t("dashboard.features.diet.p2", "Ginger Tea"),
+                t("dashboard.features.diet.p3", "Fresh Fruit")
+              ]}
+              color="green"
+              link="/diet"
             />
-          ))}
-        </div>
-        <div
-          className="absolute -top-20 -right-20 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-          style={{ background: profile.accent, opacity: 0.08 }}
-        />
-        <div
-          className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-          style={{ background: profile.accent, opacity: 0.06 }}
-        />
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24 md:pb-28 text-center">
-          <p className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase mb-6 sm:mb-8 text-stone-400">
-            {t(getGreetingKey())} &nbsp;✦&nbsp;{" "}
-            {t("dashboard.wellness_sanctuary", "Your Wellness Sanctuary")}
-          </p>
-
-          <div
-            className="inline-flex items-center gap-3 sm:gap-5 px-5 sm:px-8 py-3 sm:py-5 rounded-2xl sm:rounded-3xl mb-6 sm:mb-8 border"
-            style={{
-              background: `${profile.accent}10`,
-              borderColor: `${profile.accent}30`,
-            }}
-          >
-            <span
-              className="text-4xl sm:text-6xl drop-shadow-md"
-              role="img"
-              aria-label={dosha}
-            >
-              {profile.icon}
-            </span>
-            <div className="text-left">
-              <h1
-                className="leading-none capitalize font-bold"
-                style={{
-                  fontFamily: "'Cormorant Garamond',serif",
-                  fontSize: "clamp(2rem,8vw,5rem)",
-                  background: profile.gradient,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {dosha}
-              </h1>
-              <p className="text-[10px] font-bold tracking-[0.35em] uppercase mt-1 text-stone-400">
-                {t(`dashboard.profiles.${dosha}.element`, profile.element)}
-              </p>
-            </div>
+            <FeatureCard
+              icon={Zap}
+              title={t("dashboard.features.yoga.title", "Yoga")}
+              quote={t("dashboard.features.yoga.quote", "Harmonize body and soul")}
+              points={[
+                t("dashboard.features.yoga.p1", "Morning Flow"),
+                t("dashboard.features.yoga.p2", "Deep Breath"),
+                t("dashboard.features.yoga.p3", "Sun Salutation")
+              ]}
+              color="blue"
+              link="/yoga"
+            />
+            <FeatureCard
+              icon={Clock}
+              title={t("dashboard.features.routine.title", "Routine")}
+              quote={t("dashboard.features.routine.quote", "The rhythm of wellness")}
+              points={[
+                t("dashboard.features.routine.p1", "Early Sleep"),
+                t("dashboard.features.routine.p2", "Oil Massage"),
+                t("dashboard.features.routine.p3", "Morning Ritual")
+              ]}
+              color="amber"
+              link="/routine"
+            />
+            <FeatureCard
+              icon={BookOpen}
+              title={t("dashboard.features.guide.title", "Ayurvedic Guide")}
+              quote={t("dashboard.features.guide.quote", "Ancient wisdom, modern life")}
+              points={[
+                t("dashboard.features.guide.p1", "Herbal Care"),
+                t("dashboard.features.guide.p2", "Dosha Balance"),
+                t("dashboard.features.guide.p3", "Self Love")
+              ]}
+              color="rose"
+              link="/guidance"
+            />
           </div>
 
-          <h2
-            className="text-xl sm:text-2xl md:text-3xl font-light text-stone-700 dark:text-stone-300 mb-2"
-            style={{ fontFamily: "'Cormorant Garamond',serif" }}
-          >
-            Hi, <em className="not-italic font-semibold">{displayName}</em>
-          </h2>
-          <p className="text-[10px] sm:text-xs tracking-[0.25em] uppercase text-stone-400 mb-6 sm:mb-8">
-            {t(`dashboard.profiles.${dosha}.tagline`, profile.tagline)}
-          </p>
-          <p className="text-sm text-stone-600 dark:text-stone-400 max-w-xl mx-auto leading-loose mb-8 sm:mb-12 px-2">
-            {t(`dashboard.profiles.${dosha}.description`, profile.description)}
-          </p>
-
-          {total > 0 && scores && (
-            <div className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap mb-8 sm:mb-12">
-              {Object.entries(scores).map(([name, score]) => {
-                const pct = Math.round(((score || 0) / total) * 100);
-                const isDom = name.toLowerCase() === dosha;
-                const dp = DASHBOARD_PROFILES[name.toLowerCase()];
-                return (
-                  <div key={name} className="flex flex-col items-center gap-2">
-                    <div className="relative w-14 h-14 sm:w-16 sm:h-16">
-                      <svg
-                        viewBox="0 0 36 36"
-                        className="w-14 h-14 sm:w-16 sm:h-16 -rotate-90"
-                        aria-hidden
-                      >
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="14"
-                          fill="none"
-                          stroke="#e5e7eb"
-                          strokeWidth="2.5"
-                        />
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="14"
-                          fill="none"
-                          stroke={dp?.accent || "#aaa"}
-                          strokeWidth={isDom ? 3.5 : 2}
-                          strokeDasharray={`${pct * 0.88} 100`}
-                          strokeLinecap="round"
-                          style={{ transition: "stroke-dasharray 1s ease" }}
-                        />
-                      </svg>
-                      <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-stone-700 dark:text-stone-200">
-                        {pct}%
-                      </span>
-                    </div>
-                    <span
-                      className={`text-[10px] font-semibold uppercase tracking-widest ${isDom ? "text-stone-700 dark:text-stone-200" : "text-stone-400"}`}
-                    >
-                      {name}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          <div className="flex flex-col items-center gap-1 text-stone-400 animate-bounce">
-            <span className="text-[10px] tracking-widest uppercase font-semibold">
-              {t("dashboard.wellness_plan", "Your Wellness Plan")}
-            </span>
-            <ChevronDown className="w-4 h-4" />
-          </div>
+          <DailyTaskRitual user={user} />
         </div>
-      </div>
-
-      {/* Gradient bar */}
-      <div
-        className="h-[3px] w-full"
-        style={{ background: profile.gradient }}
-      />
-
-      {/* Recommendation cards */}
-      <div className="bg-stone-50 dark:bg-stone-950 py-12 sm:py-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-16">
-            <p
-              className="text-[10px] font-bold tracking-[0.35em] uppercase mb-4"
-              style={{ color: profile.accent }}
-            >
-              {t(
-                "dashboard.blueprint_label",
-                "Your Personalised Wellness Blueprint",
-              )}
-            </p>
-            <h2
-              className="text-4xl md:text-5xl text-stone-800 dark:text-stone-100 mb-4"
-              style={{
-                fontFamily: "'Cormorant Garamond',serif",
-                fontWeight: 600,
-              }}
-            >
-              {t("dashboard.blueprint_title", "Ancient Wisdom, Modern Living")}
-            </h2>
-            <p className="text-sm text-stone-500 dark:text-stone-400 max-w-lg mx-auto leading-relaxed">
-              {t(
-                "dashboard.blueprint_desc",
-                "Ayurvedic guidance rooted in Sri Lankan tradition, aligned with your",
-              )}{" "}
-              <span
-                className="font-semibold capitalize"
-                style={{ color: profile.accent }}
-              >
-                {dosha}
-              </span>{" "}
-              {t("dashboard.blueprint_constitution", "constitution")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {DASHBOARD_SECTIONS.filter((s) =>
-                ["diet", "yoga", "routine"].includes(s.key),
-              ).map((s, idx) => (
-                <RecommendationSection
-                  key={s.key}
-                  title={t(`dashboard.sections.${s.titleKey}`, s.titleFb)}
-                  subtitle={s.sub}
-                  icon={s.icon}
-                  profile={profile}
-                  index={idx}
-                  onClick={() => navigate(`/category/${s.key}`)}
-                />
-              ))}
-            </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-stone-900 dark:bg-black py-14 px-6 text-center">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <Leaf className="w-3.5 h-3.5 text-stone-600" />
-          <span className="text-stone-600 text-[10px] font-bold tracking-[0.4em] uppercase">
-            MarinZen
-          </span>
-        </div>
-        <p
-          className="text-stone-500 text-base italic mb-4"
-          style={{ fontFamily: "'Cormorant Garamond',serif" }}
-        >
-          &ldquo;{t(`dashboard.profiles.${dosha}.mantra`, profile.mantra)}
-          &rdquo;
-        </p>
-        <div className="flex items-center justify-center gap-2">
-          <div className="h-px w-12 bg-stone-800" />
-          <p className="text-stone-700 text-[10px] tracking-[0.3em] uppercase font-semibold">
-            {t(
-              "dashboard.footer_tagline",
-              "Rooted in Sri Lankan Ayurvedic Tradition",
-            )}
-          </p>
-          <div className="h-px w-12 bg-stone-800" />
-        </div>
-      </footer>
+      </main>
     </div>
   );
 };

@@ -82,15 +82,15 @@ SECRET_KEY="your-super-secret-key-12345"
 ALGORITHM="HS256"
 DATABASE_URL="postgresql://user:pass@host/dbname"
 
-# Task service only (optional): enables AI-generated tasks.
-# If omitted or invalid, task-service falls back to static tasks.
+# Task / Result services (optional): enables AI-generated tasks and dynamic Tamil self-healing translation.
+# If omitted or invalid, services fall back to standard seeded tasks.
 GEMINI_API_KEY="your-gemini-api-key"
 ```
 
 Recommended split for clarity:
 
 - `services/auth-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`
-- `services/result-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`
+- `services/result-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`, optional `GEMINI_API_KEY`
 - `services/task-service/.env`: `SECRET_KEY`, `ALGORITHM`, `DATABASE_URL`, optional `GEMINI_API_KEY`
 
 **`services/api-gateway/.env`**
@@ -127,14 +127,22 @@ docker compose logs -f api-gateway
 
 > Use `docker compose up --build -d` exactly (not `docker compose build up`).
 
-All python services employ auto-reloading (`--reload` with volume mounts) so that codebase edits inherently reflect live.
+All python services employ auto-reloading (`--reload` with volume mounts) and the Express task-service runs with `nodemon` so that codebase edits inherently reflect live.
 
-### 5. Seed Bilingual Recommendations (Required)
-The dashboard strictly requires existing records in the database to map Dosha suggestions. We run the native seed script from *inside* the active Docker container to push data to Postgres:
+### 5. Seed Bilingual Recommendations & Daily Tasks (Required)
+The dashboard strictly requires existing records in the database to map Dosha suggestions and daily tasks. We run the native seed scripts from *inside* the active Docker container to push data to Postgres:
+
+**A. Seed Recommendations (Profiles):**
 ```bash
 docker compose exec result-service python app/seed_recommendations.py
 ```
-> *This automatically drops old schema structures, builds composite Multi-Language indexes natively into Postgres, and populates 6 distinct entries (3 Doshas x 2 Languages).*
+> *This automatically populates the 6 dominant Dosha profile templates (3 Doshas x 2 Languages).*
+
+**B. Seed Daily Tasks (350+ Wellness Actions):**
+```bash
+docker compose exec result-service python all_seed.py
+```
+> *This loads all 350+ fully localized, high-quality wellness tasks (bilingual Tamil and English) directly into the daily_tasks table, preventing cold-starts or blank dashboards.*
 
 ### 6. Boot Frontend Client
 In a new terminal, launch the Vite dev server:

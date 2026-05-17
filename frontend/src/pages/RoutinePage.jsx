@@ -1,18 +1,19 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import TaskTrackingLayout from "@/components/tasks/TaskTrackingLayout";
+import RecommendationLayout from "@/components/recommendations/RecommendationLayout";
+import { Clock } from "lucide-react";
 
-export const RoutinePage = () => {
-  const { t } = useTranslation();
+const RoutinePage = () => {
   return (
-    <TaskTrackingLayout
-      category="routine"
-      title={t("category.routine.title", "Daily Rhythm")}
-      description={t(
-        "category.routine.description",
-        "Your Dinacharya blueprint. Synchronizing your daily actions with the rhythms of nature to promote long-term harmony and health."
-      )}
-      icon="🌅"
+    <RecommendationLayout
+      category="Routine"
+      title="Daily Routine"
+      subtitle="The Rhythm of Life"
+      icon={Clock}
+      colorClass="amber"
+      gradientFrom="from-amber-500"
+      gradientTo="to-orange-600"
+      bgBlurColor="bg-amber-200/20"
+      proTip="Consistency in your daily ritual is the foundation of mental clarity."
     />
   );
 };

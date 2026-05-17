@@ -27,8 +27,13 @@ class LoginResponse(BaseModel):
     email: EmailStr
     dosha: str | None = None
     scores: dict[str, int] | None = None
+    avatar: str | None = None
 
 
 class UpdateDoshaRequest(BaseModel):
     dosha: str
     scores: dict[str, int] | None = None
+
+
+class AvatarUpdateRequest(BaseModel):
+    avatar: str

@@ -64,7 +64,6 @@ export const SignupForm = () => {
           return;
         }
 
-        // Auto-login to preserve the token in Dashboard routes
         try {
           const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
             method: "POST",
@@ -78,18 +77,15 @@ export const SignupForm = () => {
           if (loginRes.ok) {
             const loginData = await loginRes.json();
 
-            // Set all required auth data before navigating
             localStorage.setItem("token", loginData.access_token);
             localStorage.setItem("userId", String(loginData.user_id));
             localStorage.setItem("userName", loginData.name);
             localStorage.setItem("userEmail", loginData.email);
             localStorage.setItem("marinzen_auth", "true");
 
-            // Clear quiz state and navigate
             localStorage.removeItem("prakritiQuizState");
             navigate("/discover");
           } else {
-            // If auto-login fails, redirect to login tab so they can try again
             console.error("Auto-login failed after signup");
             setErrors({ submit: t("auth.signup.errors.success_login") });
             setIsLoading(false);

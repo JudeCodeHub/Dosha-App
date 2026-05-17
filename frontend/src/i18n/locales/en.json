@@ -95,10 +95,19 @@
     "opt1_title": "Take the Prakriti Quiz",
     "opt1_desc": "Answer a few guided questions to identify your Ayurvedic body constitution.",
     "opt2_title": "I Already Know My Dosha",
-    "opt2_desc": "Select your dosha directly and continue to your personalized dashboard.",
+    "opt2_desc": "Select your dosha directly and continue to your personalized results.",
     "start_quiz": "Start Quiz",
+    "select_dosha": "Select Dosha Manually",
     "btn_next": "Next",
     "btn_finish": "See Results",
+    "select_title": "Select Your Profile",
+    "select_subtitle": "Choose your dominant dosha or dual-dosha to begin.",
+    "dosha_vata": "Vata",
+    "dosha_pitta": "Pitta",
+    "dosha_kapha": "Kapha",
+    "dosha_vata_pitta": "Vata+Pitta",
+    "dosha_pitta_kapha": "Pitta+Kapha",
+    "dosha_vata_kapha": "Vata+Kapha",
     "quiz": {
       "question_label": "Question",
       "which_best": "Which best describes your",
@@ -136,86 +145,121 @@
       "identified": "Constitution Identified",
       "element": "Element",
       "retake": "Retake quiz",
-      "enter_dashboard": "Enter Dashboard"
+      "enter_dashboard": "Go to Dashboard"
     }
   },
+  "quiz_back": "Back",
   "dashboard": {
-    "title": "Your Wellness Dashboard",
-    "profile": "Profile",
-    "mode_manual": "manual",
-    "mode_quiz": "quiz",
-    "primary_focus": "Primary Focus",
-    "focus": {
-      "vata": "Grounding and warming balance",
-      "pitta": "Cooling and calming balance",
-      "kapha": "Light and energizing balance"
+    "active_routine": "Active Routine",
+    "ready_ritual": "Ready for your Ritual?",
+    "generate_ritual_desc": "Generate today's personalized Ayurvedic actions.",
+    "start_checkin": "Start Check-in",
+    "daily_ritual_title": "Your Daily Ritual",
+    "progress": "Progress",
+    "welcome_back": "Welcome back,",
+    "ritual_tracker": "Ritual Tracker",
+    "logout": "Logout",
+    "constitution_proportions": "Constitution Proportions",
+    "constitution_proportions_desc": "Ayurveda classifies your unique mind-body bio-elements. Discover your specific balance of Vata (Air), Pitta (Fire), and Kapha (Earth).",
+    "categories": {
+      "diet": "Diet",
+      "yoga": "Yoga",
+      "routine": "Routine",
+      "ayurvedic_guide": "Ayurvedic Guide"
     },
-    "logout": "Log Out",
-    "retake_quiz": "Retake Quiz",
-    "sign_out": "Sign Out",
-    "loading": "Loading your personalized recommendations...",
-    "user": "User",
-    "aligning": "Aligning your wellness plan...",
-    "pending": "Synchronization Pending",
-    "footer": "MarinZen 🌿 Modern Wellness",
-    "desc_quiz": "Personalized suggestions based on your body-mind analysis.",
-    "desc_manual": "Wellness recommendations tailored to your selected constitution.",
-    "sections": {
-      "diet_title": "Dietary Path",
-      "yoga_title": "Movement & Yoga",
-      "skincare_title": "Skin Vitality",
-      "haircare_title": "Lustrous Hair",
-      "herbs_title": "Ancestral Herbs",
-      "routine_title": "Daily Rhythm"
+    "features": {
+      "diet": {
+        "title": "Diet",
+        "quote": "Nourish your inner fire",
+        "p1": "Warm Rice",
+        "p2": "Ginger Tea",
+        "p3": "Fresh Fruit"
+      },
+      "yoga": {
+        "title": "Yoga",
+        "quote": "Harmonize body and soul",
+        "p1": "Morning Flow",
+        "p2": "Deep Breath",
+        "p3": "Sun Salutation"
+      },
+      "routine": {
+        "title": "Routine",
+        "quote": "The rhythm of wellness",
+        "p1": "Early Sleep",
+        "p2": "Oil Massage",
+        "p3": "Morning Ritual"
+      },
+      "guide": {
+        "title": "Ayurvedic Guide",
+        "quote": "Ancient wisdom, modern life",
+        "p1": "Herbal Care",
+        "p2": "Dosha Balance",
+        "p3": "Self Love"
+      }
     },
-    "greeting_morning": "Ayubowan, Good Morning",
-    "greeting_afternoon": "Ayubowan, Good Afternoon",
-    "greeting_evening": "Ayubowan, Good Evening",
-    "wellness_sanctuary": "Your Wellness Sanctuary",
-    "wellness_plan": "Your Wellness Plan",
-    "blueprint_label": "Your Personalised Wellness Blueprint",
-    "blueprint_title": "Ancient Wisdom, Modern Living",
-    "blueprint_desc": "Ayurvedic guidance rooted in Sri Lankan tradition, aligned with your",
-    "blueprint_constitution": "constitution",
-    "loading_text": "Going to the dashboard...",
-    "no_recs": "Recommendations are being prepared.",
-    "footer_tagline": "Rooted in Sri Lankan Ayurvedic Tradition",
+    "checkin": {
+      "title": "Daily Check-in",
+      "curating": "Curating Path...",
+      "aligning": "Aligning your Ayurvedic rituals",
+      "sleep": {
+        "question": "How was your sleep?",
+        "good": "Good",
+        "average": "Average",
+        "poor": "Poor"
+      },
+      "stress": {
+        "question": "Stress level?",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "energy": {
+        "question": "Energy level?",
+        "high": "High",
+        "normal": "Normal",
+        "low": "Low"
+      },
+      "body": {
+        "question": "Body feel?",
+        "light": "Light",
+        "heavy": "Heavy",
+        "uneasy": "Uneasy"
+      }
+    },
+    "calendar": {
+      "title": "Calendar",
+      "tracked_rituals": "Tracked Rituals",
+      "no_rituals": "No tracked rituals",
+      "no_rituals_desc": "Complete check-in to build history!",
+      "ritual": "Ritual",
+      "completed": "completed",
+      "skipped": "skipped",
+      "pending": "pending"
+    },
     "explore": "Explore",
-    "back_to_dashboard": "Back to Dashboard",
-    "profiles": {
-      "vata": { "element": "Air & Space", "tagline": "Creative · Dynamic · Ethereal", "description": "As a Vata type, you embody the qualities of air and space — creative, quick-thinking, and always in motion. Your path to balance lies in warmth, grounding routines, and nourishing practices.", "mantra": "Sthira Sukham Asanam" },
-      "pitta": { "element": "Fire & Water", "tagline": "Focused · Passionate · Transformative", "description": "As a Pitta type, you carry the fire of transformation — sharp intellect, strong digestion, and natural leadership. Balance comes through cooling foods, serene environments, and self-compassion.", "mantra": "Shanti Shanti Shanti" },
-      "kapha": { "element": "Earth & Water", "tagline": "Nurturing · Steady · Abundant", "description": "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.", "mantra": "Tejasvi Navadhitamastu" }
-    }
+    "reset_confirm": "Reset today's routine checklist and start fresh?",
+    "reset_button": "Reset Daily Routine"
   },
-  "tasks": {
-    "ayurvedic_guidance": "Ayurvedic Guidance",
-    "loading_recs": "Loading recommendations...",
-    "no_recs_for": "Personalized recommendations for your",
-    "no_recs_suffix": "constitution will appear here.",
-    "aligning_plan": "Aligning your plan...",
-    "retry": "Retry",
-    "todays_actions": "Today's Actions",
-    "error_prefix": "Unable to load your",
-    "error_suffix": "plan. Please try again later.",
-    "progress_label": "Daily Progress",
-    "progress_complete": "Complete",
-    "goal_reached": "Goal Reached! ✨",
-    "staying_balanced": "Staying Balanced"
-  },
-  "category": {
+  "recommendations": {
+    "retry": "Retry Session",
+    "wisdom_guidelines": "Wisdom Guidelines",
+    "back_to_dashboard": "Dashboard",
+    "profile_title": "MarinZen Profile",
     "diet": {
-      "title": "Dietary Path",
-      "description": "Nourishing your body according to your unique constitution. These daily recommendations help maintain your digestive fire (Agni) and sustain your vitality."
+      "tip_title": "Agni Check",
+      "tip_detail": "Eat only when truly hungry for optimal digestion."
     },
     "yoga": {
-      "title": "Yoga & Exercise",
-      "description": "Ancient movement practices designed to balance your specific energy. These sequences focus on stabilizing your unique physiology."
+      "tip_title": "Best Time",
+      "tip_detail": "Brahma Muhurta (4:00 AM - 6:00 AM) for spiritual growth."
     },
     "routine": {
-      "title": "Daily Rhythm",
-      "description": "Your Dinacharya blueprint. Synchronizing your daily actions with the rhythms of nature to promote long-term harmony and health."
+      "tip_title": "Daily Ritual",
+      "tip_detail": "Tongue scraping removes toxins (Ama) from the body."
+    },
+    "guide": {
+      "tip_title": "Holistic Tip",
+      "tip_detail": "Self-Abhyanga (oil massage) calms the nervous system."
     }
-  },
-  "quiz_back": "Back"
+  }
 }

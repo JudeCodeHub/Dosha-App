@@ -21,8 +21,9 @@ export const LoginForm = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = t("auth.login.errors.email_inv");
     }
-    if (!formData.password)
+    if (!formData.password) {
       newErrors.password = t("auth.login.errors.password_req");
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -52,12 +53,14 @@ export const LoginForm = () => {
 
         const data = await response.json();
 
-        // Save auth data to localStorage as requested
         localStorage.setItem("token", data.access_token);
         localStorage.setItem("userId", String(data.user_id));
         localStorage.setItem("userName", data.name);
         localStorage.setItem("userEmail", data.email);
         localStorage.setItem("marinzen_auth", "true");
+        if (data.avatar) {
+          localStorage.setItem("userAvatar", data.avatar);
+        }
 
         if (data.dosha) {
           localStorage.setItem("marinZenUserDosha", data.dosha);
@@ -65,18 +68,15 @@ export const LoginForm = () => {
           if (data.scores) {
             savePersonalization({
               mode: "quiz",
-              dominantDosha:
-                data.dosha.charAt(0).toUpperCase() +
-                data.dosha.slice(1).toLowerCase(),
+              dominantDosha: data.dosha.charAt(0).toUpperCase() + data.dosha.slice(1).toLowerCase(),
               scores: data.scores,
             });
           }
 
           navigate("/dashboard");
         } else {
-          // Ensure we don't have leftover stale dosha if backend says null
           localStorage.removeItem("marinZenUserDosha");
-          navigate("/discover");
+          navigate("/dashboard");
         }
       } catch (error) {
         console.error("Login request failed:", error);

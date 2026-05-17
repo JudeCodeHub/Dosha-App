@@ -16,6 +16,7 @@ from app.schemas.auth import (
     SignupResponse,
     LoginRequest,
     LoginResponse,
+    AvatarUpdateRequest,
 )
 
 router = APIRouter()
@@ -91,6 +92,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         email=user.email,
         dosha=user.dosha,
         scores=scores,
+        avatar=user.avatar,
     )
 
 
@@ -126,3 +128,18 @@ def update_dosha(
         db.rollback()
 
     return {"message": "Dosha updated", "dosha": user.dosha}
+
+
+@router.patch("/avatar")
+def update_avatar(
+    payload: AvatarUpdateRequest,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(verify_access_token),
+):
+    user = db.query(User).filter(User.id == int(user_id)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.avatar = payload.avatar
+    db.commit()
+    return {"message": "Avatar updated"}

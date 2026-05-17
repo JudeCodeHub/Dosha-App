@@ -19,7 +19,7 @@ export const DISCOVER_OPTIONS = [
     titleKey: "discover.opt2_title",
     descKey: "discover.opt2_desc",
     defaultTitle: "I Already Know My Dosha",
-    defaultDesc: "Select your dosha directly and continue to your personalized dashboard.",
+    defaultDesc: "Select your dosha directly and continue to your personalized results.",
   },
 ];
 

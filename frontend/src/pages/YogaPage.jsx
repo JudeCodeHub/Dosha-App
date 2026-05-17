@@ -1,18 +1,19 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import TaskTrackingLayout from "@/components/tasks/TaskTrackingLayout";
+import RecommendationLayout from "@/components/recommendations/RecommendationLayout";
+import { Zap } from "lucide-react";
 
-export const YogaPage = () => {
-  const { t } = useTranslation();
+const YogaPage = () => {
   return (
-    <TaskTrackingLayout
-      category="yoga"
-      title={t("category.yoga.title", "Yoga & Exercise")}
-      description={t(
-        "category.yoga.description",
-        "Ancient movement practices designed to balance your specific energy. These sequences focus on stabilizing your unique physiology."
-      )}
-      icon="🧘"
+    <RecommendationLayout
+      category="Yoga"
+      title="Yoga & Movement"
+      subtitle="Physical Equilibrium"
+      icon={Zap}
+      colorClass="blue"
+      gradientFrom="from-blue-600"
+      gradientTo="to-indigo-500"
+      bgBlurColor="bg-blue-200/20"
+      proTip="The best time for yoga is early morning when the world is still."
     />
   );
 };

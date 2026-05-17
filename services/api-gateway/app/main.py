@@ -31,7 +31,7 @@ RESULT_SERVICE_URL = (
     os.getenv("RESULT_SERVICE_URL")
     or "http://result-service:8000"
 )
-TASK_SERVICE_URL = os.getenv("TASK_SERVICE_URL") or "http://task-service:8000"
+TASK_SERVICE_URL = "http://task-service:8004"
 
 
 @app.get("/")
@@ -118,6 +118,11 @@ async def proxy_quiz(path: str, request: Request):
     return await proxy_request(f"{QUIZ_SERVICE_URL}/{path}", request)
 
 
+@app.get("/api/questions")
+async def get_questions(request: Request):
+    return await proxy_request(f"{QUIZ_SERVICE_URL}/questions", request)
+
+
 @app.api_route("/recommendations/{path:path}", methods=["GET", "POST"])
 async def proxy_result(path: str, request: Request):
     return await proxy_request(
@@ -131,12 +136,11 @@ async def proxy_result(path: str, request: Request):
     methods=["GET", "POST", "PATCH", "DELETE"],
 )
 async def proxy_tasks(path: str, request: Request):
+    if path.startswith("daily-ritual") or path.startswith("history"):
+        return await proxy_request(f"{RESULT_SERVICE_URL}/tasks/{path}", request)
     return await proxy_request(f"{TASK_SERVICE_URL}/tasks/{path}", request)
 
 
-@app.get("/api/questions")
-async def get_questions(request: Request):
-    return await proxy_request(f"{QUIZ_SERVICE_URL}/questions", request)
 
 
 @app.post("/api/result")

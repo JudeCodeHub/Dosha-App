@@ -1,143 +1,5 @@
 // Data & UI Configurations for Doshas
 
-export const DASHBOARD_PROFILES = {
-  vata: {
-    gradient: "linear-gradient(135deg,#7C3AED,#4F46E5)",
-    heroBg: "linear-gradient(160deg,#F5F3FF,#EDE9FE 40%,#E0E7FF)",
-    heroBgDark: "linear-gradient(160deg,#0f0c1e,#1e1b4b 60%,#1e1047)",
-    accent: "#7C3AED",
-    accentLight: "#DDD6FE",
-    icon: "🌬️",
-    element: "Air & Space",
-    tagline: "Creative · Dynamic · Ethereal",
-    description:
-      "As a Vata type, you embody the qualities of air and space — creative, quick-thinking, and always in motion. Your path to balance lies in warmth, grounding routines, and nourishing practices.",
-    mantra: "Sthira Sukham Asanam",
-  },
-  pitta: {
-    gradient: "linear-gradient(135deg,#EA580C,#DC2626)",
-    heroBg: "linear-gradient(160deg,#FFFBEB,#FFF7ED 40%,#FEF2F2)",
-    heroBgDark: "linear-gradient(160deg,#1a0900,#431407 60%,#450a0a)",
-    accent: "#EA580C",
-    accentLight: "#FED7AA",
-    icon: "🔥",
-    element: "Fire & Water",
-    tagline: "Focused · Passionate · Transformative",
-    description:
-      "As a Pitta type, you carry the fire of transformation — sharp intellect, strong digestion, and natural leadership. Balance comes through cooling foods, serene environments, and self-compassion.",
-    mantra: "Shanti Shanti Shanti",
-  },
-  kapha: {
-    gradient: "linear-gradient(135deg,#0D9488,#059669)",
-    heroBg: "linear-gradient(160deg,#F0FDFA,#ECFDF5 40%,#F0FDF4)",
-    heroBgDark: "linear-gradient(160deg,#021a17,#042f2e 60%,#064e3b)",
-    accent: "#0D9488",
-    accentLight: "#CCFBF1",
-    icon: "🌿",
-    element: "Earth & Water",
-    tagline: "Nurturing · Steady · Abundant",
-    description:
-      "As a Kapha type, you embody the nurturing qualities of earth and water — loving, patient, and naturally resilient. Your wellness journey thrives with movement, light foods, and daily invigoration.",
-    mantra: "Tejasvi Navadhitamastu",
-  },
-  "vata+pitta": {
-    gradient: "linear-gradient(135deg,#7C3AED,#EA580C)",
-    heroBg: "linear-gradient(160deg,#F5F3FF,#FFF7ED 40%,#FEF2F2)",
-    heroBgDark: "linear-gradient(160deg,#1e1b4b,#431407 60%,#450a0a)",
-    accent: "#9333EA",
-    accentLight: "#E9D5FF",
-    icon: "🌪️",
-    element: "Air, Space & Fire",
-    tagline: "Dynamic · Passionate · Versatile",
-    description:
-      "As a Vata-Pitta type, you blend the quick, creative energy of air with the focused intensity of fire. Balance comes from grounding practices and cooling nourishment to calm the active mind.",
-    mantra: "Om Shanti",
-  },
-  "pitta+kapha": {
-    gradient: "linear-gradient(135deg,#EA580C,#0D9488)",
-    heroBg: "linear-gradient(160deg,#FFF7ED,#ECFDF5 40%,#F0FDF4)",
-    heroBgDark: "linear-gradient(160deg,#431407,#042f2e 60%,#064e3b)",
-    accent: "#B45309",
-    accentLight: "#FDE68A",
-    icon: "🌋",
-    element: "Fire, Water & Earth",
-    tagline: "Driven · Nurturing · Powerful",
-    description:
-      "As a Pitta-Kapha type, you combine the sharp, driven nature of fire with the stable, caring qualities of earth. Your balance involves moderate, regular movement and a varied diet to keep energy flowing.",
-    mantra: "Lokah Samastah Sukhino Bhavantu",
-  },
-  "vata+kapha": {
-    gradient: "linear-gradient(135deg,#7C3AED,#0D9488)",
-    heroBg: "linear-gradient(160deg,#F5F3FF,#ECFDF5 40%,#F0FDF4)",
-    heroBgDark: "linear-gradient(160deg,#1e1b4b,#042f2e 60%,#064e3b)",
-    accent: "#4F46E5",
-    accentLight: "#C7D2FE",
-    icon: "🌊",
-    element: "Air, Space, Earth & Water",
-    tagline: "Adaptable · Steady · Harmonious",
-    description:
-      "As a Vata-Kapha type, you have both the light, creative spirit of air and the grounded strength of earth. Staying active and warm will keep your diverse energies in perfect harmony.",
-    mantra: "Om Namah Shivaya",
-  },
-};
-
-export const DASHBOARD_SECTIONS = [
-  {
-    key: "diet",
-    altKey: null,
-    icon: "🌾",
-    titleKey: "diet_title",
-    titleFb: "Dietary Path",
-    subKey: "diet_sub",
-    sub: "Nourishment for your constitution",
-  },
-  {
-    key: "yoga",
-    altKey: null,
-    icon: "🧘",
-    titleKey: "yoga_title",
-    titleFb: "Movement & Yoga",
-    subKey: "yoga_sub",
-    sub: "Body-mind harmony practices",
-  },
-  {
-    key: "skincare",
-    altKey: null,
-    icon: "✨",
-    titleKey: "skincare_title",
-    titleFb: "Skin Vitality",
-    subKey: "skincare_sub",
-    sub: "Radiance rituals",
-  },
-  {
-    key: "haircare",
-    altKey: null,
-    icon: "🥥",
-    titleKey: "haircare_title",
-    titleFb: "Lustrous Hair",
-    subKey: "haircare_sub",
-    sub: "Traditional care wisdom",
-  },
-  {
-    key: "herbs",
-    altKey: "remedies",
-    icon: "🌿",
-    titleKey: "herbs_title",
-    titleFb: "Ancestral Herbs",
-    subKey: "herbs_sub",
-    sub: "Sri Lankan botanical remedies",
-  },
-  {
-    key: "routine",
-    altKey: null,
-    icon: "🌅",
-    titleKey: "routine_title",
-    titleFb: "Daily Rhythm",
-    subKey: "routine_sub",
-    sub: "Your Dinacharya blueprint",
-  },
-];
-
 export const QUIZ_QUESTION_CONFIG = {
   vata: {
     border: "border-violet-400",
@@ -242,5 +104,32 @@ export const QUIZ_RESULT_CONFIG = {
     emoji: "🌊",
     element: "Air, Space, Earth & Water",
     qualities: ["Adaptable", "Steady", "Harmonious"],
+  },
+};
+
+export const DASHBOARD_PROFILES = {
+  vata: {
+    gradient: "linear-gradient(to bottom right, #8b5cf6, #6366f1)",
+    accent: "#8b5cf6",
+  },
+  pitta: {
+    gradient: "linear-gradient(to bottom right, #f97316, #ef4444)",
+    accent: "#f97316",
+  },
+  kapha: {
+    gradient: "linear-gradient(to bottom right, #14b8a6, #10b981)",
+    accent: "#14b8a6",
+  },
+  "vata+pitta": {
+    gradient: "linear-gradient(to bottom right, #8b5cf6, #f97316)",
+    accent: "#d946ef",
+  },
+  "pitta+kapha": {
+    gradient: "linear-gradient(to bottom right, #f97316, #14b8a6)",
+    accent: "#f59e0b",
+  },
+  "vata+kapha": {
+    gradient: "linear-gradient(to bottom right, #8b5cf6, #14b8a6)",
+    accent: "#6366f1",
   },
 };

@@ -9,25 +9,34 @@ import IntroPage from "@/pages/IntroPage";
 import AuthPage from "@/pages/AuthPage";
 import DiscoverPage from "@/pages/DiscoverPage";
 import DoshaSelectPage from "@/pages/DoshaSelectPage";
+import { API_BASE_URL } from "@/config/api";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import DashboardPage from "@/pages/DashboardPage";
 import DietPage from "@/pages/DietPage";
 import YogaPage from "@/pages/YogaPage";
 import RoutinePage from "@/pages/RoutinePage";
-import { API_BASE_URL } from "@/config/api";
-import { useTranslation } from "react-i18next";
+import GuidancePage from "@/pages/GuidancePage";
+import TasksPage from "@/pages/TasksPage";
 
 const QuizModule = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t, i18n } = useTranslation();
+
+  const isRetake = new URLSearchParams(location.search).get("retake") === "true";
 
   const [quizStarted, setQuizStarted] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
-      return s ? (JSON.parse(s).quizStarted ?? false) : false;
+      const state = s ? JSON.parse(s) : {};
+      if (isRetake) return true;
+      return state.quizStarted ?? false;
     } catch {
-      return false;
+      return isRetake || false;
     }
   });
+  
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
@@ -36,6 +45,7 @@ const QuizModule = () => {
       return 0;
     }
   });
+  
   const [answers, setAnswers] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
@@ -44,6 +54,7 @@ const QuizModule = () => {
       return [];
     }
   });
+  
   const [quizFinished, setQuizFinished] = useState(() => {
     try {
       const s = localStorage.getItem("prakritiQuizState");
@@ -53,6 +64,8 @@ const QuizModule = () => {
     }
   });
 
+  const [backendResult, setBackendResult] = useState(null);
+  const [calculating, setCalculating] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,7 +73,7 @@ const QuizModule = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       try {
         const response = await fetch(`${API_BASE_URL}/api/questions`, {
@@ -77,25 +90,17 @@ const QuizModule = () => {
           if (Array.isArray(data.questions)) {
             setQuestions(data.questions);
           } else {
-            console.error(
-              "Malformed API response: 'questions' should be an array.",
-            );
-            setError(
-              "The quiz service returned invalid data. Please try again.",
-            );
+            console.error("Malformed API response: 'questions' should be an array.");
+            setError("The quiz service returned invalid data. Please try again.");
           }
         } else {
-          console.error(
-            `Failed to load questions: ${response.status} ${response.statusText}`,
-          );
+          console.error(`Failed to load questions: ${response.status} ${response.statusText}`);
           setError("Failed to load questions from backend. Please try again.");
         }
       } catch (err) {
         if (err.name === "AbortError") {
           console.error("Quiz questions fetch timed out.");
-          setError(
-            "The request timed out. Please check your connection and try again.",
-          );
+          setError("The request timed out. Please check your connection and try again.");
         } else {
           console.error("Error fetching questions:", err);
           setError("Error connecting to the backend API.");
@@ -108,7 +113,6 @@ const QuizModule = () => {
     fetchQuestions();
   }, [i18n.language]);
 
-  // Persist state to localStorage on every change
   useEffect(() => {
     localStorage.setItem(
       "prakritiQuizState",
@@ -119,7 +123,38 @@ const QuizModule = () => {
         quizFinished,
       }),
     );
-  }, [quizStarted, currentQuestionIndex, answers, quizFinished]);
+
+    if (quizFinished && !backendResult && !calculating && answers.length > 0) {
+      const calculateBackendResult = async () => {
+        setCalculating(true);
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/result`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              answers: answers.map((a) => ({
+                dosha: a.charAt(0).toUpperCase() + a.slice(1).toLowerCase(),
+              })),
+            }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setBackendResult(data);
+          } else {
+            console.error("Backend calculation failed");
+          }
+        } catch (err) {
+          console.error("Error connecting to result service:", err);
+        } finally {
+          setCalculating(false);
+        }
+      };
+      calculateBackendResult();
+    }
+  }, [quizStarted, currentQuestionIndex, answers, quizFinished, backendResult, calculating]);
 
   const currentQuestion = questions?.[currentQuestionIndex] || null;
   const selectedAnswer = answers[currentQuestionIndex] || "";
@@ -149,55 +184,11 @@ const QuizModule = () => {
     }
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex((prev) => prev - 1);
+    } else if (quizStarted && !isRetake) {
+      setQuizStarted(false);
     } else {
-      navigate("/discover");
+      navigate(isRetake ? "/dashboard" : "/discover");
     }
-  };
-
-  const calculateScores = () => {
-    const scores = {
-      vata: 0,
-      pitta: 0,
-      kapha: 0,
-    };
-
-    answers.forEach((answer) => {
-      if (scores[answer] !== undefined) {
-        scores[answer] += 1;
-      }
-    });
-
-    return scores;
-  };
-
-  const getDominantDosha = (scores) => {
-    const total = Object.values(scores).reduce((a, b) => a + b, 0);
-    if (total === 0) return null;
-    
-    const percentages = {
-      vata: (scores.vata / total) * 100,
-      pitta: (scores.pitta / total) * 100,
-      kapha: (scores.kapha / total) * 100,
-    };
-    
-    const sorted = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
-    const [top1_dosha, top1_score] = sorted[0];
-    const [top2_dosha, top2_score] = sorted[1];
-    
-    if (top1_score >= 70) {
-      return top1_dosha;
-    }
-    
-    if (top1_score - top2_score <= 10) {
-      const order = { vata: 1, pitta: 2, kapha: 3 };
-      if (order[top1_dosha] < order[top2_dosha]) {
-        return `${top1_dosha}+${top2_dosha}`;
-      } else {
-        return `${top2_dosha}+${top1_dosha}`;
-      }
-    }
-    
-    return top1_dosha;
   };
 
   const handleRestart = () => {
@@ -206,10 +197,8 @@ const QuizModule = () => {
     setCurrentQuestionIndex(0);
     setAnswers([]);
     setQuizFinished(false);
+    setBackendResult(null);
   };
-
-  const scores = calculateScores();
-  const result = getDominantDosha(scores);
 
   return (
     <main className="min-h-screen px-3 sm:px-4 pt-16 sm:pt-20 pb-10 flex flex-col items-center justify-center relative overflow-x-hidden w-full">
@@ -217,7 +206,7 @@ const QuizModule = () => {
       <div className="pointer-events-none absolute -bottom-32 -right-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-orange-200/30 dark:bg-orange-900/20 blur-3xl" />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] rounded-full bg-amber-100/20 dark:bg-amber-900/10 blur-3xl" />
 
-      {quizStarted && (
+      {!quizFinished && (
         <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-50">
           <Button
             variant="ghost"
@@ -233,7 +222,7 @@ const QuizModule = () => {
 
       <div className="relative z-10 w-full flex items-center justify-center">
         {!quizStarted ? (
-          <QuizIntro onStart={handleStartQuiz} />
+          <QuizIntro onStart={handleStartQuiz} onBack={handlePrev} />
         ) : loading ? (
           <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
             <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">
@@ -269,10 +258,17 @@ const QuizModule = () => {
             onNext={handleNext}
             onPrev={handlePrev}
           />
+        ) : calculating || !backendResult ? (
+          <div className="text-center p-8 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl shadow-xl max-w-2xl w-full mx-4">
+            <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-100">
+              {t("discover.result.loading", "Calculating your constitution...")}
+            </h2>
+          </div>
         ) : (
           <QuizResult
-            result={result}
-            scores={scores}
+            result={backendResult.dominant_dosha}
+            scores={backendResult.counts}
+            percentages={backendResult.percentages}
             onRestart={handleRestart}
           />
         )}
@@ -292,9 +288,11 @@ const App = () => {
           <Route path="/dosha-select" element={<DoshaSelectPage />} />
           <Route path="/quiz" element={<QuizModule />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/category/diet" element={<DietPage />} />
-          <Route path="/category/yoga" element={<YogaPage />} />
-          <Route path="/category/routine" element={<RoutinePage />} />
+          <Route path="/diet" element={<DietPage />} />
+          <Route path="/yoga" element={<YogaPage />} />
+          <Route path="/routine" element={<RoutinePage />} />
+          <Route path="/guidance" element={<GuidancePage />} />
+          <Route path="/tasks" element={<TasksPage />} />
         </Routes>
       </BrowserRouter>
     </div>
