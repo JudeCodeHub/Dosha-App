@@ -1,15 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Calendar } from "lucide-react";
+import { LogOut, Calendar, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CalendarModal from "./CalendarModal";
+import { getPersonalization } from "@/utils/personalizationStorage";
 
 const ActionButtons = ({ user }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [isManual, setIsManual] = useState(false);
   const popoverRef = useRef(null);
+
+  useEffect(() => {
+    const data = getPersonalization();
+    if (!data || data.mode === "manual") {
+      setIsManual(true);
+    } else {
+      setIsManual(false);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,6 +48,18 @@ const ActionButtons = ({ user }) => {
 
   return (
     <div className="flex items-center gap-1 sm:gap-3">
+      {isManual && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/quiz?retake=true")}
+          className="flex items-center gap-2 text-stone-500 hover:text-amber-500 dark:hover:text-amber-400 transition-colors rounded-xl font-medium px-2 sm:px-3"
+        >
+          <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+          <span className="hidden sm:inline">{t("dashboard.take_quiz", "Take Quiz")}</span>
+        </Button>
+      )}
+
       <div className="relative" ref={popoverRef}>
         <Button
           variant="ghost"

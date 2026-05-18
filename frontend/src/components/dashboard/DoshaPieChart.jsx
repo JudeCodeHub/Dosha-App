@@ -16,18 +16,18 @@ const DoshaPieChart = () => {
     setPersonalization(data);
 
     if (data && data.scores) {
-      const v = Number(data.scores.vata || 0);
-      const p = Number(data.scores.pitta || 0);
-      const k = Number(data.scores.kapha || 0);
+      const v = Number(data.scores.vata ?? data.scores.Vata ?? 0);
+      const p = Number(data.scores.pitta ?? data.scores.Pitta ?? 0);
+      const k = Number(data.scores.kapha ?? data.scores.Kapha ?? 0);
       const total = v + p + k;
 
       if (total > 0 && data.mode === "quiz") {
         setHasQuizData(true);
         if (data.percentages) {
           setPercentages({
-            vata: Math.round(Number(data.percentages.vata || 0)),
-            pitta: Math.round(Number(data.percentages.pitta || 0)),
-            kapha: Math.round(Number(data.percentages.kapha || 0)),
+            vata: Math.round(Number(data.percentages.vata ?? data.percentages.Vata ?? 0)),
+            pitta: Math.round(Number(data.percentages.pitta ?? data.percentages.Pitta ?? 0)),
+            kapha: Math.round(Number(data.percentages.kapha ?? data.percentages.Kapha ?? 0)),
           });
         } else {
           const vPct = Math.round((v / total) * 100);
